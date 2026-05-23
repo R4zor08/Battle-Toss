@@ -1,0 +1,264 @@
+import React, { useEffect, useState } from 'react';
+import { GameEngineState } from '../types/game';
+import { CHARACTERS, POWER_UPS } from '../game/data';
+import { GAME_CONSTANTS } from '../game/constants';
+import { Settings, Zap } from 'lucide-react';
+import { loadAvatar, subscribeAvatars } from '../utils/avatars';
+const AIDebugOverlay: React.FC<{
+  state: GameEngineState;
+}> = ({ state }) => {
+  const [, tick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => tick((n) => n + 1), 50);
+    return () => clearInterval(id);
+  }, []);
+  const p2 = state.players[1];
+  const aiTurn =
+  state.players[state.currentTurnIndex]?.isAI && state.phase === 'aiming';
+  if (!p2.isAI || !state.difficulty) return null;
+  const reactionMs = (state as any).aiReactionMs as number | undefined;
+  const startedAt = (state as any).aiReactionStart as number | null | undefined;
+  const elapsed = startedAt ? performance.now() - startedAt : 0;
+  const remaining =
+  reactionMs && startedAt ? Math.max(0, reactionMs - elapsed) : 0;
+  const reading = !!(state as any).aiInputReading;
+  return (
+    <div className="pointer-events-none absolute top-2 right-2 bg-black/70 text-white font-mono text-[10px] sm:text-xs px-3 py-2 rounded-lg border border-white/10 backdrop-blur-sm leading-tight">
+      <div className="flex items-center gap-2">
+        <span className="text-gray-400">AI:</span>
+        <span
+          className={
+          state.difficulty === 'easy' ?
+          'text-green-400' :
+          state.difficulty === 'intermediate' ?
+          'text-blue-300' :
+          state.difficulty === 'hard' ?
+          'text-orange-400' :
+          'text-pink-400'
+          }>
+          
+          {state.difficulty.toUpperCase()}
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-gray-400">React:</span>
+        <span
+          className={
+          aiTurn && remaining > 0 ? 'text-yellow-300' : 'text-gray-500'
+          }>
+          
+          {aiTurn && remaining > 0 ?
+          `${Math.ceil(remaining)}ms` :
+          reactionMs ?
+          `~${reactionMs}ms` :
+          '—'}
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-gray-400">Reading:</span>
+        <span className={reading ? 'text-red-400' : 'text-gray-500'}>
+          {reading ? 'YES (2f delay)' : 'no'}
+        </span>
+      </div>
+    </div>);
+
+};
+const HudAvatar: React.FC<{
+  char: any;
+}> = ({ char }) => {
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    if (char.avatarUrl) loadAvatar(char.avatarUrl);
+    const unsub = subscribeAvatars(() => forceUpdate((n) => n + 1));
+    return () => {
+      unsub();
+    };
+  }, [char.avatarUrl]);
+  if (char.avatarUrl) {
+    const entry = loadAvatar(char.avatarUrl);
+    const src = entry.dataUrl || char.avatarUrl;
+    return (
+      <div
+        className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-lg flex items-center justify-center"
+        style={{
+          background: `radial-gradient(circle, ${char.color}33 0%, #1f2937 80%)`
+        }}>
+        
+        <img
+          src={src}
+          alt={char.name}
+          className="w-full h-full object-contain"
+          draggable={false} />
+        
+      </div>);
+
+  }
+  return (
+    <div
+      className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center font-bold text-lg shadow-lg"
+      style={{
+        backgroundColor: char.color
+      }}>
+      
+      {char.name.charAt(0)}
+    </div>);
+
+};
+interface GameUIProps {
+  state: GameEngineState;
+  onActivatePowerUp: (id: string) => void;
+  onPause: () => void;
+}
+export const GameUI: React.FC<GameUIProps> = ({
+  state,
+  onActivatePowerUp,
+  onPause
+}) => {
+  const p1 = state.players[0];
+  const p2 = state.players[1];
+  const currentPlayer = state.players[state.currentTurnIndex];
+  const isP1Turn = state.currentTurnIndex === 0;
+  const renderHealthBar = (player: any, isRight: boolean) => {
+    const charDef = CHARACTERS[player.characterId];
+    const hpPercent = Math.max(0, player.hp / player.maxHp * 100);
+    const isLow = hpPercent < 30;
+    return (
+      <div
+        className={`flex flex-col ${isRight ? 'items-end' : 'items-start'} w-1/3 max-w-[300px]`}>
+        
+        <div
+          className={`flex items-center gap-2 mb-1 ${isRight ? 'flex-row-reverse' : 'flex-row'}`}>
+          
+          <HudAvatar char={charDef} />
+          <div className="text-white font-black text-shadow-sm uppercase tracking-wider">
+            {charDef.name}
+          </div>
+        </div>
+
+        <div className="w-full h-6 bg-gray-900 rounded-full border-2 border-gray-700 overflow-hidden relative shadow-inner">
+          <div
+            className={`h-full transition-all duration-300 ease-out ${isLow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`}
+            style={{
+              width: `${hpPercent}%`,
+              float: isRight ? 'right' : 'left'
+            }} />
+          
+          <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white text-shadow-sm">
+            {Math.ceil(player.hp)} / {player.maxHp}
+          </div>
+        </div>
+
+        <div
+          className={`flex gap-1 mt-2 ${isRight ? 'justify-end' : 'justify-start'}`}>
+          
+          {Array.from({
+            length: GAME_CONSTANTS.MAX_POWER_POINTS
+          }).map((_, i) =>
+          <div
+            key={i}
+            className={`w-4 h-4 rounded-full border border-white/50 transition-all ${i < player.powerPoints ? 'bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]' : 'bg-gray-800'}`} />
+
+          )}
+        </div>
+      </div>);
+
+  };
+  return (
+    <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-2 sm:p-4">
+      <AIDebugOverlay state={state} />
+      {/* Top HUD */}
+      <div className="flex justify-between items-start w-full">
+        {renderHealthBar(p1, false)}
+
+        <div className="flex flex-col items-center">
+          <button
+            onClick={onPause}
+            className="pointer-events-auto bg-gray-800/80 hover:bg-gray-700 p-2 rounded-full text-white backdrop-blur-sm transition-transform hover:scale-110">
+            
+            <Settings size={24} />
+          </button>
+
+          <div className="mt-4 bg-black/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm border border-white/20 flex flex-col items-center">
+            <span className="text-white font-bold text-xs sm:text-sm">
+              {state.phase === 'aiming' ?
+              <span className={isP1Turn ? 'text-blue-400' : 'text-red-400'}>
+                  {isP1Turn ?
+                'PLAYER 1 TURN' :
+                p2.isAI ?
+                'AI TURN' :
+                'PLAYER 2 TURN'}
+                </span> :
+
+              <span className="text-yellow-400">FIRING...</span>
+              }
+            </span>
+            {p2.isAI && state.difficulty &&
+            <span
+              className={`text-[10px] uppercase font-black tracking-wider mt-0.5 ${state.difficulty === 'easy' ? 'text-green-400' : state.difficulty === 'intermediate' ? 'text-blue-300' : state.difficulty === 'hard' ? 'text-orange-400' : 'text-pink-400'}`}>
+              
+                AI · {state.difficulty}
+              </span>
+            }
+          </div>
+        </div>
+
+        {renderHealthBar(p2, true)}
+      </div>
+
+      {/* Bottom UI - Powerups */}
+      <div className="flex justify-center items-end pb-4">
+        {state.phase === 'aiming' && !currentPlayer.isAI &&
+        <div className="pointer-events-auto flex gap-2 sm:gap-4 bg-black/40 p-2 sm:p-4 rounded-2xl backdrop-blur-md border border-white/10 max-w-full overflow-x-auto">
+            {CHARACTERS[currentPlayer.characterId].powerUpIds.map((puId) => {
+            const pu = POWER_UPS[puId];
+            const canAfford = currentPlayer.powerPoints >= pu.cost;
+            const isActive = currentPlayer.activePowerUp === puId;
+            return (
+              <button
+                key={puId}
+                onClick={() => onActivatePowerUp(puId)}
+                disabled={!canAfford || currentPlayer.activePowerUp !== null}
+                className={`relative group flex flex-col items-center justify-center w-14 h-14 sm:w-20 sm:h-20 rounded-xl border-2 transition-all flex-shrink-0
+                    ${isActive ? 'border-yellow-400 bg-yellow-400/20 scale-110 shadow-[0_0_15px_rgba(250,204,21,0.5)]' : canAfford && !currentPlayer.activePowerUp ? 'border-blue-400 bg-blue-900/50 hover:bg-blue-800/80 hover:scale-105 cursor-pointer' : 'border-gray-600 bg-gray-800/50 opacity-50 cursor-not-allowed'}
+                  `}>
+                
+                  <Zap
+                  className={
+                  isActive ?
+                  'text-yellow-400' :
+                  canAfford ?
+                  'text-blue-400' :
+                  'text-gray-500'
+                  }
+                  size={28} />
+                
+                  <span className="text-[10px] text-white font-bold mt-1 text-center leading-tight px-1">
+                    {pu.name}
+                  </span>
+
+                  <div className="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-yellow-500 text-black font-black flex items-center justify-center text-xs border-2 border-black">
+                    {pu.cost}
+                  </div>
+
+                  {/* Tooltip */}
+                  <div className="absolute bottom-full mb-2 hidden group-hover:block w-32 bg-black/90 text-white text-xs p-2 rounded border border-white/20 z-10 pointer-events-none">
+                    {pu.description}
+                  </div>
+                </button>);
+
+          })}
+          </div>
+        }
+      </div>
+
+      {/* Aim Instruction */}
+      {state.phase === 'aiming' &&
+      !currentPlayer.isAI &&
+      !state.aimDragStart &&
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white/50 font-black text-2xl tracking-widest animate-pulse pointer-events-none">
+            DRAG BACK TO AIM
+          </div>
+      }
+    </div>);
+
+};
