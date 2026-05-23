@@ -7,7 +7,7 @@ import {
   FloatingText } from
 '../types/game';
 import { GAME_CONSTANTS } from './constants';
-import { CHARACTERS, WEAPONS } from './data';
+import { CHARACTERS, WEAPONS, POWER_UPS } from './data';
 import {
   distance,
   randomRange,
@@ -115,6 +115,112 @@ size: number = 24) =>
   });
 };
 
+const applyHeal = (
+  state: GameEngineState,
+  player: Player,
+  amount: number
+) => {
+  const before = player.hp;
+  player.hp = Math.min(player.maxHp, player.hp + amount);
+  const healed = player.hp - before;
+  if (healed > 0) {
+    addFloatingText(
+      state,
+      `+${healed}`,
+      { x: player.position.x, y: player.position.y - 40 },
+      '#00ff88',
+      22
+    );
+    createExplosion(state, player.position, '#00ff88', 15);
+  }
+};
+
+export const isTechniqueShot = (powerUpId: string | null): boolean =>
+  powerUpId === 'space_phase' || powerUpId === 'space_orbital';
+
+export const activatePowerUpForPlayer = (
+  state: GameEngineState,
+  player: Player,
+  powerUpId: string
+): boolean => {
+  const pu = POWER_UPS[powerUpId];
+  if (!pu || player.powerPoints < pu.cost || player.activePowerUp) return false;
+  if (player.statusEffects.some((e) => e.type === 'emp')) return false;
+
+  player.powerPoints -= pu.cost;
+
+  if (powerUpId === 'space_heal') {
+    applyHeal(state, player, 15);
+    return true;
+  }
+
+  player.activePowerUp = powerUpId;
+  return true;
+};
+
+const executeTechniqueShot = (
+  state: GameEngineState,
+  powerUp: string
+) => {
+  const currentPlayer = state.players[state.currentTurnIndex];
+  const enemy = state.players.find((p) => p.id !== currentPlayer.id);
+  if (!enemy) return;
+
+  if (powerUp === 'space_phase') {
+    const approachDir =
+      Math.sign(enemy.position.x - currentPlayer.position.x) || 1;
+    currentPlayer.position.x = Math.max(
+      80,
+      Math.min(
+        GAME_CONSTANTS.CANVAS_WIDTH - 80,
+        enemy.position.x - approachDir * 55
+      )
+    );
+    currentPlayer.facing = approachDir as 1 | -1;
+    const dmg = Math.floor(randomRange(14, 20));
+    applyDamage(state, enemy, dmg, currentPlayer.id);
+    addFloatingText(
+      state,
+      'PHASE SHIFT',
+      { x: enemy.position.x, y: enemy.position.y - 50 },
+      '#a78bfa',
+      22
+    );
+    createExplosion(state, enemy.position, '#a78bfa', 30);
+    state.camera.shake = 15;
+  }
+
+  if (powerUp === 'space_orbital') {
+    addFloatingText(
+      state,
+      'ORBITAL STRIKE',
+      { x: enemy.position.x, y: enemy.position.y - 70 },
+      '#22d3ee',
+      24
+    );
+    for (let i = 0; i < 3; i++) {
+      const offsetX = (i - 1) * 45;
+      const strikePos = {
+        x: enemy.position.x + offsetX,
+        y: enemy.position.y - 100
+      };
+      createExplosion(state, strikePos, '#22d3ee', 20);
+      applyDamage(
+        state,
+        enemy,
+        Math.floor(randomRange(8, 12)),
+        currentPlayer.id
+      );
+    }
+    state.camera.shake = 25;
+  }
+
+  currentPlayer.activePowerUp = null;
+  state.phase = 'firing';
+  state.aimDragStart = null;
+  state.aimDragCurrent = null;
+};
+
 export const fireProjectile = (
 state: GameEngineState,
 power: number,
@@ -128,6 +234,12 @@ angle: number) =>
   const velocityY = Math.sin(angle) * power * weaponDef.speedMultiplier;
 
   const powerUp = currentPlayer.activePowerUp;
+
+  if (powerUp === 'space_phase' || powerUp === 'space_orbital') {
+    executeTechniqueShot(state, powerUp);
+    return;
+  }
+
   let count = 1;
   let spread = 0;
 

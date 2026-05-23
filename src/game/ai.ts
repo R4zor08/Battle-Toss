@@ -1,6 +1,7 @@
 import { Difficulty, GameEngineState, Player } from '../types/game';
 import { GAME_CONSTANTS } from './constants';
 import { CHARACTERS, WEAPONS, POWER_UPS } from './data';
+import { activatePowerUpForPlayer, isTechniqueShot } from './engine';
 import { distance, randomRange } from '../utils/math';
 
 export interface DifficultyConfig {
@@ -176,6 +177,7 @@ function isBetterShot(
 }
 
 function trySelectPowerUp(
+  state: GameEngineState,
   aiPlayer: Player,
   targetPlayer: Player,
   config: DifficultyConfig
@@ -216,6 +218,7 @@ function trySelectPowerUp(
       isHoming ||
       id.includes('railgun') ||
       id.includes('phase') ||
+      id.includes('orbital') ||
       id.includes('berserk');
 
     if (isDefensive) {
@@ -271,9 +274,7 @@ function trySelectPowerUp(
       ? Math.floor(Math.random() * ranked.length)
       : 0;
   const chosenPu = ranked[pickIndex].id;
-
-  aiPlayer.activePowerUp = chosenPu;
-  aiPlayer.powerPoints -= POWER_UPS[chosenPu].cost;
+  activatePowerUpForPlayer(state, aiPlayer, chosenPu);
 }
 
 export const calculateAIAim = (
@@ -288,7 +289,12 @@ export const calculateAIAim = (
   const difficulty = state.difficulty || 'intermediate';
   const config = DIFFICULTY_CONFIG[difficulty];
 
-  trySelectPowerUp(aiPlayer, targetPlayer, config);
+  trySelectPowerUp(state, aiPlayer, targetPlayer, config);
+
+  if (isTechniqueShot(aiPlayer.activePowerUp)) {
+    const dir = targetPlayer.position.x >= aiPlayer.position.x ? 1 : -1;
+    return { power: 20, angle: dir > 0 ? 0 : Math.PI };
+  }
 
   const charDef = CHARACTERS[aiPlayer.characterId];
   const weaponDef = WEAPONS[charDef.weaponId];

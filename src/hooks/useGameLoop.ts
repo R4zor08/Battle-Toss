@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { GameEngineState } from '../types/game';
-import { updateEngine, fireProjectile } from '../game/engine';
+import { updateEngine, fireProjectile, activatePowerUpForPlayer } from '../game/engine';
 import { renderGame } from '../game/renderer';
 import { calculateAIAim, DIFFICULTY_CONFIG, getAIThinkDelay } from '../game/ai';
 
@@ -137,15 +137,9 @@ onGameOver: (winnerId: string) => void) =>
     const player = state.players[state.currentTurnIndex];
     if (state.phase !== 'aiming' || player.isAI) return;
 
-    // Find cost
-    import('../game/data').then(({ POWER_UPS }) => {
-      const pu = POWER_UPS[powerUpId];
-      if (pu && player.powerPoints >= pu.cost) {
-        player.powerPoints -= pu.cost;
-        player.activePowerUp = powerUpId;
-        setGameState({ ...state });
-      }
-    });
+    if (activatePowerUpForPlayer(state, player, powerUpId)) {
+      setGameState({ ...state });
+    }
   };
 
   return {
