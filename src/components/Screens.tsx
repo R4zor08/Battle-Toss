@@ -95,7 +95,7 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
   };
 
   return (
-    <div className="menu-shell menu-mobile-scroll menu-landscape-fit absolute inset-0 flex flex-col items-center justify-start overflow-y-auto min-h-0">
+    <div className="menu-shell menu-opener menu-mobile-scroll menu-landscape-fit absolute inset-0 flex flex-col items-center justify-start overflow-y-auto min-h-0">
       <MenuBackground />
 
       <div className="menu-audio-controls absolute top-4 right-4 z-20 flex gap-2">
@@ -113,7 +113,7 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
         </button>
       </div>
 
-      <div className="menu-landscape-stack z-10 px-4 pb-2">
+      <div className="menu-opener-column menu-landscape-stack z-10 px-4 pb-2">
         <MenuLogo />
 
         <div className="menu-actions flex flex-col items-center gap-2 sm:gap-4 w-full max-w-sm">
@@ -121,14 +121,14 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
           onClick={() => handleMenuAction(() => onStartGame('ai'))}
           className="menu-btn-primary menu-btn-primary-green">
           <Play fill="currentColor" size={22} />
-          Play vs AI
+          PLAY VS AI
         </button>
 
         <button
           onClick={() => handleMenuAction(() => onStartGame('local'))}
           className="menu-btn-primary menu-btn-primary-blue">
           <Users size={22} />
-          Local 2 Player
+          LOCAL 2 PLAYER
         </button>
 
         {onNavigate && (
@@ -136,12 +136,12 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
             <button
               onClick={() => handleMenuAction(() => onNavigate('characterGallery' as ScreenState))}
               className="menu-btn-secondary">
-              Characters
+              CHARACTERS
             </button>
             <button
               onClick={() => handleMenuAction(() => onNavigate('mapGallery' as ScreenState))}
               className="menu-btn-secondary">
-              Maps
+              MAPS
             </button>
           </div>
         )}

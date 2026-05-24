@@ -3,21 +3,27 @@ import React from 'react';
 const WingSwoosh: React.FC<{ mirrored?: boolean; gradId: string }> = ({ mirrored, gradId }) => (
   <svg
     className={`menu-wing ${mirrored ? 'menu-wing-mirror' : ''}`}
-    viewBox="0 0 48 24"
+    viewBox="0 0 52 28"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden>
     <path
-      d="M4 20 C12 8, 28 4, 44 12 L40 16 C26 10, 14 14, 6 20 Z"
+      d="M2 24 C10 8, 26 3, 48 12 L44 16 C30 9, 16 13, 6 24 Z"
       fill={`url(#${gradId})`}
-      stroke="rgba(200,210,230,0.6)"
-      strokeWidth="0.5"
+      stroke="rgba(210,220,240,0.7)"
+      strokeWidth="0.6"
+    />
+    <path
+      d="M8 20 C18 10, 32 8, 42 14"
+      stroke="rgba(255,255,255,0.35)"
+      strokeWidth="1"
+      fill="none"
     />
     <defs>
       <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#e8eef8" />
-        <stop offset="50%" stopColor="#a0b0c8" />
-        <stop offset="100%" stopColor="#607080" />
+        <stop offset="0%" stopColor="#f4f7ff" />
+        <stop offset="45%" stopColor="#b0c0d8" />
+        <stop offset="100%" stopColor="#5a7088" />
       </linearGradient>
     </defs>
   </svg>
@@ -30,21 +36,21 @@ const PortalIcons: React.FC = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden>
-    <g transform="translate(140, 100)">
-      <rect x="-4" y="-55" width="8" height="70" rx="2" fill="#8b6914" transform="rotate(-35)" />
-      <polygon points="-18,-55 -4,-70 10,-55" fill="#aaa" transform="rotate(-35)" />
-      <rect x="-4" y="-55" width="8" height="70" rx="2" fill="#8b6914" transform="rotate(35)" />
-      <polygon points="-18,-55 -4,-70 10,-55" fill="#aaa" transform="rotate(35)" />
+    <g transform="translate(140, 72)">
+      <rect x="-5" y="-50" width="10" height="62" rx="2" fill="#9a7820" transform="rotate(-38)" />
+      <polygon points="-20,-48 -5,-64 10,-48" fill="#c8c8c8" transform="rotate(-38)" />
+      <rect x="-5" y="-50" width="10" height="62" rx="2" fill="#9a7820" transform="rotate(38)" />
+      <polygon points="-20,-48 -5,-64 10,-48" fill="#c8c8c8" transform="rotate(38)" />
     </g>
-    <g transform="translate(75, 155)">
-      <rect x="-12" y="-20" width="24" height="35" rx="4" fill="#6a2d8a" stroke="#9a4dba" strokeWidth="1.5" />
-      <rect x="-6" y="-28" width="12" height="10" rx="2" fill="#888" />
-      <ellipse cx="0" cy="-5" rx="8" ry="12" fill="#cc44ff" opacity="0.7" />
+    <g transform="translate(88, 118)">
+      <rect x="-11" y="-18" width="22" height="32" rx="4" fill="#5a2480" stroke="#a060c8" strokeWidth="1.5" />
+      <rect x="-5" y="-26" width="10" height="9" rx="2" fill="#999" />
+      <ellipse cx="0" cy="-4" rx="7" ry="10" fill="#d060ff" opacity="0.75" />
     </g>
-    <g transform="translate(205, 155)">
-      <rect x="-12" y="-20" width="24" height="35" rx="4" fill="#2d6a4a" stroke="#4dba7a" strokeWidth="1.5" />
-      <rect x="-6" y="-28" width="12" height="10" rx="2" fill="#888" />
-      <ellipse cx="0" cy="-5" rx="8" ry="12" fill="#44ff88" opacity="0.7" />
+    <g transform="translate(192, 118)">
+      <rect x="-11" y="-18" width="22" height="32" rx="4" fill="#1f6048" stroke="#40a878" strokeWidth="1.5" />
+      <rect x="-5" y="-26" width="10" height="9" rx="2" fill="#999" />
+      <ellipse cx="0" cy="-4" rx="7" ry="10" fill="#50e890" opacity="0.75" />
     </g>
   </svg>
 );
@@ -70,6 +76,7 @@ const PARTICLE_POSITIONS: { left: string; top: string; delay: string }[] = [
 
 export const MenuBackground: React.FC = () => (
   <>
+    <div className="menu-portal-burst" aria-hidden />
     <div className="menu-bokeh menu-bokeh-warm" aria-hidden />
     <div className="menu-bokeh menu-bokeh-cool" aria-hidden />
     <div className="menu-particles" aria-hidden>

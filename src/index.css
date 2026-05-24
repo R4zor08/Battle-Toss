@@ -326,6 +326,7 @@ body {
     right: max(0.5rem, env(safe-area-inset-right, 0px));
   }
 
+  .menu-opener-column,
   .menu-landscape-stack {
     width: 100%;
     display: flex;
@@ -335,47 +336,58 @@ body {
   }
 
   .menu-logo-wrap {
+    --menu-portal-size: min(calc(var(--vvh, 100dvh) * 0.38), 160px);
+    --menu-portal-glow: min(calc(var(--vvh, 100dvh) * 0.32), 140px);
+    --menu-portal-icons: min(calc(var(--vvh, 100dvh) * 0.28), 120px);
     width: min(70vw, 320px);
     min-height: 0;
     height: auto;
     margin-bottom: 0.25rem;
   }
 
+  .menu-portal-burst {
+    width: min(calc(var(--vvh, 100dvh) * 0.45), 200px);
+    height: min(calc(var(--vvh, 100dvh) * 0.45), 200px);
+    top: 24%;
+  }
+
   .menu-portal-ring {
-    width: min(28vh, 140px);
-    height: min(28vh, 140px);
-    margin-top: calc(min(28vh, 140px) / -2);
-    margin-left: calc(min(28vh, 140px) / -2);
+    width: var(--menu-portal-size);
+    height: var(--menu-portal-size);
+    margin-top: calc(var(--menu-portal-size) / -2);
+    margin-left: calc(var(--menu-portal-size) / -2);
   }
 
   .menu-portal-glow {
-    width: min(24vh, 120px);
-    height: min(24vh, 120px);
-    margin-top: calc(min(24vh, 120px) / -2);
-    margin-left: calc(min(24vh, 120px) / -2);
+    width: var(--menu-portal-glow);
+    height: var(--menu-portal-glow);
+    margin-top: calc(var(--menu-portal-glow) / -2);
+    margin-left: calc(var(--menu-portal-glow) / -2);
   }
 
   .menu-portal-icons {
-    width: min(20vh, 100px);
-    height: min(20vh, 100px);
-    margin-top: calc(min(20vh, 100px) / -2 - 12px);
-    margin-left: calc(min(20vh, 100px) / -2);
+    width: var(--menu-portal-icons);
+    height: var(--menu-portal-icons);
+    margin-top: calc(var(--menu-portal-icons) / -2 - 8px);
+    margin-left: calc(var(--menu-portal-icons) / -2);
+    opacity: 0.45;
   }
 
   .menu-title-stack {
-    margin-top: 0.5rem;
+    margin-top: 0;
+    padding-top: 0.25rem;
   }
 
   .menu-title-main {
-    font-size: clamp(1.25rem, 5.5vh, 2.25rem);
+    font-size: clamp(1.25rem, calc(var(--vvh, 100dvh) * 0.055), 2.25rem);
   }
 
   .menu-title-masters {
-    font-size: clamp(0.85rem, 3.5vh, 1.5rem);
+    font-size: clamp(0.85rem, calc(var(--vvh, 100dvh) * 0.035), 1.5rem);
   }
 
   .menu-wing {
-    width: clamp(20px, 4vh, 36px);
+    width: clamp(20px, calc(var(--vvh, 100dvh) * 0.04), 36px);
   }
 
   .menu-actions {
@@ -384,8 +396,9 @@ body {
 
   .menu-btn-primary {
     padding: 0.5rem 1rem;
-    font-size: clamp(0.75rem, 2.5vh, 1rem);
+    font-size: clamp(0.75rem, calc(var(--vvh, 100dvh) * 0.025), 1rem);
     max-width: 16rem;
+    border-radius: 1rem;
   }
 
   .menu-btn-secondary {
@@ -654,6 +667,7 @@ body {
 }
 
 @media (pointer: coarse) and (orientation: landscape) and (max-height: 400px) {
+  .menu-opener-column,
   .menu-landscape-stack {
     transform: scale(0.85);
     transform-origin: top center;
@@ -1071,10 +1085,45 @@ body {
 
 /* ── Main Menu (reference style) ── */
 
+.menu-opener {
+  position: relative;
+}
+
+.menu-opener-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
 .menu-shell {
   background:
-    radial-gradient(ellipse 90% 70% at 50% 25%, rgba(120, 60, 180, 0.35) 0%, transparent 55%),
-    radial-gradient(ellipse 100% 100% at 50% 100%, #1a0835 0%, #120820 45%, #0a0512 100%);
+    radial-gradient(ellipse 80% 55% at 50% 32%, rgba(255, 140, 60, 0.22) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 70% at 50% 22%, rgba(120, 60, 180, 0.45) 0%, transparent 58%),
+    radial-gradient(ellipse 120% 100% at 50% 100%, #2e1a6b 0%, #120b2e 42%, #0a0512 100%);
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.35);
+}
+
+.menu-portal-burst {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(55vw, 55vh, 420px);
+  height: min(55vw, 55vh, 420px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 190, 90, 0.5) 0%,
+    rgba(255, 120, 50, 0.28) 38%,
+    transparent 68%
+  );
+  pointer-events: none;
+  filter: blur(10px);
+  z-index: 0;
 }
 
 .menu-bokeh {
@@ -1175,25 +1224,29 @@ body {
 }
 
 .menu-logo-wrap {
+  --menu-portal-size: min(42vw, 42vh, 380px);
+  --menu-portal-glow: min(35vw, 35vh, 320px);
+  --menu-portal-icons: min(30vw, 30vh, 280px);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: min(92vw, 520px);
-  min-height: min(52vw, 260px);
-  margin-bottom: 1rem;
+  min-height: min(42vw, 42vh, 340px);
+  margin-bottom: 0.75rem;
   z-index: 10;
   flex-shrink: 0;
 }
 
 .menu-portal-ring {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
-  width: min(78vw, 380px);
-  height: min(78vw, 380px);
-  margin-top: calc(min(78vw, 380px) / -2);
-  margin-left: calc(min(78vw, 380px) / -2);
+  width: var(--menu-portal-size);
+  height: var(--menu-portal-size);
+  margin-top: calc(var(--menu-portal-size) / -2);
+  margin-left: calc(var(--menu-portal-size) / -2);
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
@@ -1212,12 +1265,12 @@ body {
 
 .menu-portal-glow {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
-  width: min(65vw, 320px);
-  height: min(65vw, 320px);
-  margin-top: calc(min(65vw, 320px) / -2);
-  margin-left: calc(min(65vw, 320px) / -2);
+  width: var(--menu-portal-glow);
+  height: var(--menu-portal-glow);
+  margin-top: calc(var(--menu-portal-glow) / -2);
+  margin-left: calc(var(--menu-portal-glow) / -2);
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -1240,13 +1293,13 @@ body {
 
 .menu-portal-icons {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
-  width: min(55vw, 280px);
-  height: min(55vw, 280px);
-  margin-top: calc(min(55vw, 280px) / -2 - 20px);
-  margin-left: calc(min(55vw, 280px) / -2);
-  opacity: 0.35;
+  width: var(--menu-portal-icons);
+  height: var(--menu-portal-icons);
+  margin-top: calc(var(--menu-portal-icons) / -2 - 8px);
+  margin-left: calc(var(--menu-portal-icons) / -2);
+  opacity: 0.45;
   pointer-events: none;
 }
 
@@ -1254,11 +1307,12 @@ body {
   position: relative;
   z-index: 2;
   text-align: center;
-  margin-top: min(22vw, 100px);
+  margin-top: 0;
+  padding-top: 6%;
 }
 
 .menu-title-main {
-  font-size: clamp(2.4rem, 9vw, 4.5rem);
+  font-size: clamp(2.2rem, min(9vw, 9vh), 4.5rem);
   font-weight: 900;
   line-height: 0.95;
   letter-spacing: 0.02em;
@@ -1306,7 +1360,7 @@ body {
 }
 
 .menu-title-masters {
-  font-size: clamp(1.5rem, 5.5vw, 2.75rem);
+  font-size: clamp(1.4rem, min(5.5vw, 5.5vh), 2.75rem);
   font-weight: 900;
   letter-spacing: 0.35em;
   color: transparent;
@@ -1340,11 +1394,11 @@ body {
   gap: 0.65rem;
   width: 100%;
   max-width: 20rem;
-  padding: 1rem 1.5rem;
+  padding: 1.05rem 1.5rem;
   border: none;
-  border-radius: 1rem;
+  border-radius: 1.25rem;
   font-weight: 900;
-  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+  font-size: clamp(1rem, min(3.5vw, 3.5vh), 1.35rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: white;
@@ -1410,14 +1464,14 @@ body {
 
 .menu-btn-secondary {
   padding: 0.85rem 1rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, #252535 0%, #1a1a28 100%);
-  color: rgba(255, 255, 255, 0.85);
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, #2a2a38 0%, #1e1e2a 100%);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   cursor: pointer;
   box-shadow: 0 3px 0 #0a0a12, 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
