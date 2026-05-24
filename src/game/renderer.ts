@@ -1,4 +1,4 @@
-import { GameEngineState, Vector2D } from '../types/game';
+import { GameEngineState } from '../types/game';
 import { GAME_CONSTANTS } from './constants';
 import { CHARACTERS, WEAPONS, MAPS } from './data';
 import { loadAvatar, loadImage } from '../utils/avatars';

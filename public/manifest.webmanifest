@@ -1,0 +1,10 @@
+{
+  "name": "Battle Toss Masters",
+  "short_name": "Battle Toss",
+  "description": "Turn-based projectile battle game",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#111827"
+}

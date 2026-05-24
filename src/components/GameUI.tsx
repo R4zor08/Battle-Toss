@@ -79,7 +79,7 @@ const HudAvatar: React.FC<{
     const src = entry.dataUrl || char.avatarUrl;
     return (
       <div
-        className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-lg flex items-center justify-center"
+        className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-lg flex items-center justify-center hud-avatar"
         style={{
           background: `radial-gradient(circle, ${char.color}33 0%, #1f2937 80%)`
         }}>
@@ -95,7 +95,7 @@ const HudAvatar: React.FC<{
   }
   return (
     <div
-      className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center font-bold text-lg shadow-lg"
+      className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center font-bold text-lg shadow-lg hud-avatar"
       style={{
         backgroundColor: char.color
       }}>
@@ -123,7 +123,7 @@ const WindIndicator: React.FC<{
   return (
     <div
       key={state.turnCount}
-      className="mt-2 bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm border border-cyan-500/30 flex flex-col items-center gap-1 min-w-[120px]">
+      className="mt-2 bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm border border-cyan-500/30 flex flex-col items-center gap-1 min-w-[120px] hud-wind">
       
       <div className="flex items-center gap-1.5 text-cyan-300 text-[10px] font-black uppercase tracking-wider">
         <Wind size={12} />
@@ -174,12 +174,12 @@ export const GameUI: React.FC<GameUIProps> = ({
           className={`flex items-center gap-2 mb-1 ${isRight ? 'flex-row-reverse' : 'flex-row'}`}>
           
           <HudAvatar char={charDef} />
-          <div className="text-white font-black text-shadow-sm uppercase tracking-wider">
+          <div className="text-white font-black text-shadow-sm uppercase tracking-wider hud-player-name">
             {charDef.name}
           </div>
         </div>
 
-        <div className="w-full h-6 bg-gray-900 rounded-full border-2 border-gray-700 overflow-hidden relative shadow-inner">
+        <div className="w-full h-6 hud-health-bar bg-gray-900 rounded-full border-2 border-gray-700 overflow-hidden relative shadow-inner">
           <div
             className={`h-full transition-all duration-300 ease-out ${isLow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`}
             style={{
@@ -208,7 +208,7 @@ export const GameUI: React.FC<GameUIProps> = ({
 
   };
   return (
-    <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-2 sm:p-4">
+    <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-2 sm:p-4 game-hud-compact">
       <AIDebugOverlay state={state} />
       {/* Top HUD */}
       <div className="flex justify-between items-start w-full">
@@ -222,7 +222,7 @@ export const GameUI: React.FC<GameUIProps> = ({
             <Settings size={24} />
           </button>
 
-          <div className="mt-4 bg-black/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm border border-white/20 flex flex-col items-center">
+          <div className="mt-4 hud-turn-badge bg-black/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm border border-white/20 flex flex-col items-center">
             <span className="text-white font-bold text-xs sm:text-sm">
               {state.phase === 'aiming' ?
               <span className={isP1Turn ? 'text-blue-400' : 'text-red-400'}>
@@ -253,7 +253,7 @@ export const GameUI: React.FC<GameUIProps> = ({
       {/* Bottom UI - Powerups */}
       <div className="flex justify-center items-end pb-4">
         {state.phase === 'aiming' && !currentPlayer.isAI &&
-        <div className="pointer-events-auto flex gap-2 sm:gap-4 bg-black/40 p-2 sm:p-4 rounded-2xl backdrop-blur-md border border-white/10 max-w-full overflow-x-auto">
+        <div className="pointer-events-auto hud-powerups flex gap-2 sm:gap-4 bg-black/40 p-2 sm:p-4 rounded-2xl backdrop-blur-md border border-white/10 max-w-full overflow-x-auto">
             {CHARACTERS[currentPlayer.characterId].powerUpIds.map((puId) => {
             const pu = POWER_UPS[puId];
             const canAfford = currentPlayer.powerPoints >= pu.cost;
@@ -263,7 +263,7 @@ export const GameUI: React.FC<GameUIProps> = ({
                 key={puId}
                 onClick={() => onActivatePowerUp(puId)}
                 disabled={!canAfford || currentPlayer.activePowerUp !== null}
-                className={`relative group flex flex-col items-center justify-center w-14 h-14 sm:w-20 sm:h-20 rounded-xl border-2 transition-all flex-shrink-0
+                className={`hud-powerup-btn relative group flex flex-col items-center justify-center w-14 h-14 sm:w-20 sm:h-20 rounded-xl border-2 transition-all flex-shrink-0
                     ${isActive ? 'border-yellow-400 bg-yellow-400/20 scale-110 shadow-[0_0_15px_rgba(250,204,21,0.5)]' : canAfford && !currentPlayer.activePowerUp ? 'border-blue-400 bg-blue-900/50 hover:bg-blue-800/80 hover:scale-105 cursor-pointer' : 'border-gray-600 bg-gray-800/50 opacity-50 cursor-not-allowed'}
                   `}>
                 
@@ -300,7 +300,7 @@ export const GameUI: React.FC<GameUIProps> = ({
       {state.phase === 'aiming' &&
       !currentPlayer.isAI &&
       !state.aimDragStart &&
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white/50 font-black text-2xl tracking-widest animate-pulse pointer-events-none">
+      <div className="hud-aim-hint absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white/50 font-black text-2xl tracking-widest animate-pulse pointer-events-none">
             DRAG BACK TO AIM
           </div>
       }

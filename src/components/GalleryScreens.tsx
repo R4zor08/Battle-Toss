@@ -79,7 +79,7 @@ export const MapGallery: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       <div className="gallery-ambient gallery-ambient-blue" aria-hidden />
 
       <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
-        <div className="w-full max-w-6xl mx-auto flex justify-between items-center mb-4 sm:mb-6">
+        <div className="w-full max-w-6xl mx-auto flex justify-between items-center mb-4 sm:mb-6 gallery-compact-header">
           <GalleryBackButton onBack={onBack} />
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 uppercase tracking-wider gallery-title-glow">
@@ -202,7 +202,7 @@ export const CharacterGallery: React.FC<{ onBack: () => void }> = ({ onBack }) =
       <div className="gallery-ambient gallery-ambient-purple" aria-hidden />
 
       <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
-        <div className="w-full max-w-5xl mx-auto flex justify-between items-center mb-4 sm:mb-6">
+        <div className="w-full max-w-5xl mx-auto flex justify-between items-center mb-4 sm:mb-6 gallery-compact-header">
           <GalleryBackButton onBack={onBack} />
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-fuchsia-400 to-purple-500 uppercase tracking-wider gallery-title-glow">

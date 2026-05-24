@@ -157,7 +157,7 @@ export const MatchCountdown: React.FC<MatchCountdownProps> = ({
   }
 
   return (
-    <div className="absolute inset-0 z-50 pointer-events-none flex flex-col items-center justify-between py-6 sm:py-8 overflow-hidden countdown-vignette animate-countdown-overlay-in">
+    <div className="absolute inset-0 z-50 pointer-events-none flex flex-col items-center justify-between py-6 sm:py-8 overflow-hidden countdown-vignette animate-countdown-overlay-in countdown-compact">
       <div className="countdown-letterbox countdown-letterbox-top" aria-hidden />
       <div className="countdown-letterbox countdown-letterbox-bottom" aria-hidden />
 
@@ -179,8 +179,8 @@ export const MatchCountdown: React.FC<MatchCountdownProps> = ({
         <p className="countdown-meta-pill">{metaParts.join('  ·  ')}</p>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-8 sm:gap-10 flex-1 justify-center w-full px-6">
-        <div className="flex items-center justify-center gap-5 sm:gap-8 w-full max-w-xl">
+      <div className="relative z-10 flex flex-col items-center gap-8 sm:gap-10 flex-1 justify-center w-full px-6 countdown-main-row">
+        <div className="flex items-center justify-center gap-5 sm:gap-8 w-full max-w-xl countdown-main-row">
           <FighterCard charId={p1Char} role="Player 1" accent="blue" />
 
           <div className="relative flex flex-col items-center self-center shrink-0 w-14 h-24 animate-countdown-vs-in">
@@ -201,7 +201,7 @@ export const MatchCountdown: React.FC<MatchCountdownProps> = ({
         </div>
 
         <div className="relative flex flex-col items-center gap-5">
-          <div className="relative flex items-center justify-center min-h-[6rem] sm:min-h-[7.5rem]">
+          <div className="relative flex items-center justify-center min-h-[6rem] sm:min-h-[7.5rem] countdown-digit-wrap">
             {!isFight && (
               <>
                 <div

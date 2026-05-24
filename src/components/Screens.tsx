@@ -4,7 +4,8 @@ import { loadAvatar, subscribeAvatars } from '../utils/avatars';
 const CharacterAvatar: React.FC<{
   char: any;
   size?: number;
-}> = ({ char, size = 96 }) => {
+  className?: string;
+}> = ({ char, size = 96, className = '' }) => {
   const [, forceUpdate] = useState(0);
   useEffect(() => {
     if (char.avatarUrl) loadAvatar(char.avatarUrl);
@@ -18,7 +19,7 @@ const CharacterAvatar: React.FC<{
     const src = entry.dataUrl || char.avatarUrl;
     return (
       <div
-        className="rounded-full border-4 border-white shadow-inner overflow-hidden flex items-center justify-center"
+        className={`rounded-full border-4 border-white shadow-inner overflow-hidden flex items-center justify-center ${className}`}
         style={{
           width: size,
           height: size,
@@ -36,7 +37,7 @@ const CharacterAvatar: React.FC<{
   }
   return (
     <div
-      className="rounded-full border-4 border-white shadow-inner flex items-center justify-center font-black"
+      className={`rounded-full border-4 border-white shadow-inner flex items-center justify-center font-black ${className}`}
       style={{
         width: size,
         height: size,
@@ -208,8 +209,8 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
   const characters = Object.values(CHARACTERS);
   const maps = Object.values(MAPS);
   return (
-    <div className="absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-6">
-      <div className="w-full flex justify-between items-center mb-8">
+    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-6 min-h-0">
+      <div className="char-select-header w-full flex justify-between items-center mb-8 shrink-0">
         <button
           onClick={onBack}
           className="text-gray-400 hover:text-white flex items-center gap-2 font-bold">
@@ -230,7 +231,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
         <div className="w-20"></div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center w-full max-w-4xl">
+      <div className="char-select-content flex-1 flex items-center justify-center w-full max-w-4xl min-h-0">
         {step < 3 ?
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
             {characters.map((char) => {
@@ -242,9 +243,9 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                 onClick={() =>
                 step === 1 ? setP1Char(char.id) : setP2Char(char.id)
                 }
-                className={`flex flex-col items-center p-4 rounded-2xl border-4 transition-all ${isSelected ? 'border-yellow-400 bg-gray-800 scale-105 shadow-[0_0_20px_rgba(250,204,21,0.5)]' : 'border-gray-700 bg-gray-800/50 hover:border-gray-500'}`}>
+                className={`char-select-card flex flex-col items-center p-4 rounded-2xl border-4 transition-all ${isSelected ? 'border-yellow-400 bg-gray-800 scale-105 shadow-[0_0_20px_rgba(250,204,21,0.5)]' : 'border-gray-700 bg-gray-800/50 hover:border-gray-500'}`}>
                 
-                  <CharacterAvatar char={char} size={96} />
+                  <CharacterAvatar char={char} size={96} className="char-select-avatar" />
                   <span className="font-bold text-lg text-center mt-3">
                     {char.name}
                   </span>
@@ -309,7 +310,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
 
       <button
         onClick={handleNext}
-        className="mt-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-black py-4 px-12 rounded-full font-black text-2xl uppercase tracking-wider shadow-[0_8px_0_rgb(194,65,12)] hover:translate-y-1 hover:shadow-[0_4px_0_rgb(194,65,12)] active:translate-y-2 active:shadow-none transition-all">
+        className="char-select-battle-btn mt-8 shrink-0 bg-gradient-to-r from-yellow-400 to-orange-500 text-black py-4 px-12 rounded-full font-black text-2xl uppercase tracking-wider shadow-[0_8px_0_rgb(194,65,12)] hover:translate-y-1 hover:shadow-[0_4px_0_rgb(194,65,12)] active:translate-y-2 active:shadow-none transition-all">
         
         {step === finalStep ? 'BATTLE!' : 'NEXT'}
       </button>
@@ -328,8 +329,8 @@ export const GameOver: React.FC<GameOverProps> = ({
 }) => {
   const isDraw = winnerId === 'draw';
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
-      <div className="bg-gray-900 border-4 border-gray-700 p-8 rounded-3xl flex flex-col items-center max-w-md w-full mx-4 shadow-2xl transform animate-bounce-in">
+    <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50 p-4">
+      <div className="modal-compact bg-gray-900 border-4 border-gray-700 p-8 rounded-3xl flex flex-col items-center max-w-md w-full mx-4 shadow-2xl transform animate-bounce-in">
         <Trophy size={64} className="text-yellow-400 mb-4" />
 
         <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 mb-2 uppercase text-center">
