@@ -413,5 +413,45 @@ export const MAPS: Record<string, MapDef> = {
     theme: 'forest',
     backgroundImageUrl: "/8daa867a-4cfd-43f1-a368-902ebd651c37.jpg"
 
-  }
+  },
+  sunnyMeadow: {
+    id: 'sunnyMeadow',
+    name: 'Sunny Meadow',
+    groundColor: '#4a7c3f',
+    skyColors: ['#87CEEB', '#E0F6FF'],
+    theme: 'forest',
+    backgroundImageUrl: '/maps/sunny-meadow.png',
+  },
+  alpineVista: {
+    id: 'alpineVista',
+    name: 'Alpine Vista',
+    groundColor: '#3d6b4f',
+    skyColors: ['#5eb3d4', '#b8e0f0'],
+    theme: 'forest',
+    backgroundImageUrl: '/maps/alpine-vista.png',
+  },
+  shadowGrove: {
+    id: 'shadowGrove',
+    name: 'Shadow Grove',
+    groundColor: '#1b3321',
+    skyColors: ['#1a2540', '#3b5078'],
+    theme: 'forest',
+    backgroundImageUrl: '/maps/shadow-grove.png',
+  },
+  riversideGrove: {
+    id: 'riversideGrove',
+    name: 'Riverside Grove',
+    groundColor: '#2d5a27',
+    skyColors: ['#a8d8ea', '#c5e8c5'],
+    theme: 'forest',
+    backgroundImageUrl: '/maps/riverside-grove.png',
+  },
+  sunsetHighway: {
+    id: 'sunsetHighway',
+    name: 'Sunset Highway',
+    groundColor: '#3a3a3a',
+    skyColors: ['#ff8c42', '#4a3728'],
+    theme: 'desert',
+    backgroundImageUrl: '/maps/sunset-highway.png',
+  },
 };
