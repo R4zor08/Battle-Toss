@@ -19,7 +19,7 @@ p2CharId: string,
 isP2AI: boolean,
 mapId: string)
 : GameEngineState => {
-  return {
+  const state: GameEngineState = {
     players: [
     {
       id: 'p1',
@@ -70,8 +70,16 @@ mapId: string)
     aimDragStart: null,
     aimDragCurrent: null,
     winnerId: null,
-    turnCount: 0
+    turnCount: 0,
+    aimTurnRemainingMs: null
   };
+  startAimTimerIfHuman(state);
+  return state;
+};
+
+const startAimTimerIfHuman = (state: GameEngineState) => {
+  const player = state.players[state.currentTurnIndex];
+  state.aimTurnRemainingMs = player.isAI ? null : GAME_CONSTANTS.AIM_TURN_MS;
 };
 
 export const createExplosion = (
@@ -217,6 +225,7 @@ const executeTechniqueShot = (
   }
 
   currentPlayer.activePowerUp = null;
+  state.aimTurnRemainingMs = null;
   state.phase = 'firing';
   state.aimDragStart = null;
   state.aimDragCurrent = null;
@@ -277,6 +286,7 @@ angle: number) =>
   }
 
   currentPlayer.activePowerUp = null;
+  state.aimTurnRemainingMs = null;
   state.phase = 'firing';
   state.aimDragStart = null;
   state.aimDragCurrent = null;
@@ -594,4 +604,32 @@ const endTurn = (state: GameEngineState) => {
     state.winnerId =
     state.players.find((p) => p.id !== currentPlayer.id)?.id || 'draw';
   }
+
+  startAimTimerIfHuman(state);
+};
+
+export const forfeitAimTurn = (state: GameEngineState) => {
+  const currentPlayer = state.players[state.currentTurnIndex];
+  if (
+    state.phase !== 'aiming' ||
+    currentPlayer.isAI ||
+    state.aimTurnRemainingMs === null
+  ) {
+    return;
+  }
+
+  state.aimDragStart = null;
+  state.aimDragCurrent = null;
+  currentPlayer.activePowerUp = null;
+  state.aimTurnRemainingMs = null;
+
+  addFloatingText(
+    state,
+    'TIME UP!',
+    { x: currentPlayer.position.x, y: currentPlayer.position.y - 40 },
+    '#facc15',
+    22
+  );
+
+  endTurn(state);
 };

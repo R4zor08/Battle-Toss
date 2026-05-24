@@ -138,5 +138,6 @@ export interface GameEngineState {
   aimDragCurrent: Vector2D | null;
   winnerId: string | null;
   turnCount: number;
+  aimTurnRemainingMs: number | null;
   difficulty?: Difficulty;
 }

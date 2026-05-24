@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { GameEngineState } from '../types/game';
-import { updateEngine, fireProjectile, activatePowerUpForPlayer } from '../game/engine';
+import { updateEngine, fireProjectile, activatePowerUpForPlayer, forfeitAimTurn } from '../game/engine';
 import { renderGame } from '../game/renderer';
 import { calculateAIAim, DIFFICULTY_CONFIG, getAIThinkDelay } from '../game/ai';
 import { initAudio, playSfx, stopMenuMusic } from '../audio/soundManager';
@@ -9,7 +9,8 @@ export const useGameLoop = (
 canvasRef: React.RefObject<HTMLCanvasElement>,
 initialState: GameEngineState,
 onGameOver: (winnerId: string) => void,
-frozen: boolean = false) =>
+frozen: boolean = false,
+isPaused: boolean = false) =>
 {
   const [gameState, setGameState] = useState<GameEngineState>(initialState);
   const stateRef = useRef<GameEngineState>(initialState);
@@ -17,7 +18,9 @@ frozen: boolean = false) =>
   const aiTimerRef = useRef<NodeJS.Timeout>();
   const gameOverSoundPlayed = useRef(false);
   const frozenRef = useRef(frozen);
+  const pausedRef = useRef(isPaused);
   const activePointerId = useRef<number | null>(null);
+  const lastFrameTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
     frozenRef.current = frozen;
@@ -28,9 +31,14 @@ frozen: boolean = false) =>
   }, [frozen]);
 
   useEffect(() => {
+    pausedRef.current = isPaused;
+  }, [isPaused]);
+
+  useEffect(() => {
     stateRef.current = initialState;
     setGameState({ ...initialState });
     gameOverSoundPlayed.current = false;
+    lastFrameTimeRef.current = null;
     stopMenuMusic();
   }, [initialState]);
 
@@ -39,9 +47,29 @@ frozen: boolean = false) =>
 
     const state = stateRef.current;
     const isFrozen = frozenRef.current;
+    const isPausedNow = pausedRef.current;
+    const now = performance.now();
+    const lastFrame = lastFrameTimeRef.current ?? now;
+    const deltaMs = Math.min(now - lastFrame, 100);
+    lastFrameTimeRef.current = now;
 
     if (!isFrozen) {
       updateEngine(state);
+    }
+
+    if (
+      !isFrozen &&
+      !isPausedNow &&
+      state.phase === 'aiming' &&
+      !state.players[state.currentTurnIndex].isAI &&
+      state.aimTurnRemainingMs !== null
+    ) {
+      state.aimTurnRemainingMs -= deltaMs;
+      if (state.aimTurnRemainingMs <= 0) {
+        state.aimTurnRemainingMs = 0;
+        activePointerId.current = null;
+        forfeitAimTurn(state);
+      }
     }
 
     // Render

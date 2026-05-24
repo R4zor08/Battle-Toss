@@ -136,6 +136,7 @@ export function App() {
           initialState={gameState}
           frozen={screen === 'countdown'}
           showUI={screen === 'playing'}
+          isPaused={isPaused && screen === 'playing'}
           onGameOver={handleGameOver}
           onPauseToggle={() => setIsPaused(!isPaused)} />
 
@@ -161,7 +162,7 @@ export function App() {
         }
 
         {isPaused && screen === 'playing' &&
-        <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4">
+        <div className="modal-overlay-scroll absolute inset-0 bg-black/80 flex items-start sm:items-center justify-center z-50 backdrop-blur-sm p-4">
             <div className="modal-compact bg-gray-900 p-8 rounded-2xl border-2 border-gray-700 flex flex-col gap-4 min-w-0 w-full max-w-md">
               <h2 className="text-3xl font-black text-white text-center mb-4">
                 PAUSED
@@ -210,7 +211,8 @@ function GameContainer({
   onGameOver,
   onPauseToggle,
   frozen = false,
-  showUI = true
+  showUI = true,
+  isPaused = false
 }: any) {
   const {
     gameState,
@@ -219,7 +221,7 @@ function GameContainer({
     handlePointerUp,
     handleLostPointerCapture,
     activatePowerUp
-  } = useGameLoop(canvasRef, initialState, onGameOver, frozen);
+  } = useGameLoop(canvasRef, initialState, onGameOver, frozen, isPaused);
   return (
     <>
       <canvas

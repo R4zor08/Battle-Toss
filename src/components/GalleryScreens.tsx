@@ -78,7 +78,7 @@ export const MapGallery: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-[#0a0e17] text-white overflow-hidden gallery-shell">
+    <div className="absolute inset-0 flex flex-col bg-[#0a0e17] text-white overflow-x-hidden overflow-y-auto gallery-shell min-w-0">
       <div className="gallery-ambient gallery-ambient-cyan" aria-hidden />
       <div className="gallery-ambient gallery-ambient-blue" aria-hidden />
 
@@ -201,7 +201,7 @@ export const CharacterGallery: React.FC<{ onBack: () => void }> = ({ onBack }) =
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-[#0a0e17] text-white overflow-hidden gallery-shell">
+    <div className="absolute inset-0 flex flex-col bg-[#0a0e17] text-white overflow-x-hidden overflow-y-auto gallery-shell min-w-0">
       <div className="gallery-ambient gallery-ambient-pink" aria-hidden />
       <div className="gallery-ambient gallery-ambient-purple" aria-hidden />
 
@@ -220,7 +220,7 @@ export const CharacterGallery: React.FC<{ onBack: () => void }> = ({ onBack }) =
         </div>
 
         <div className="flex-1 overflow-y-auto min-h-0 w-full max-w-5xl mx-auto pb-4">
-          <div className="gallery-content grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="gallery-content gallery-content--chars grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {characters.map((char, i) => {
               const isSelected = selectedId === char.id;
               const weaponName = formatWeaponName(char.weaponId);

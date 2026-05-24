@@ -211,7 +211,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
   const characters = Object.values(CHARACTERS);
   const maps = Object.values(MAPS);
   return (
-    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-3 sm:p-6 min-h-0 overflow-y-auto">
+    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-3 sm:p-6 min-h-0 min-w-0 overflow-x-hidden overflow-y-hidden">
       <div className="char-select-header w-full flex justify-between items-center mb-2 sm:mb-8 shrink-0">
         <button
           onClick={onBack}
@@ -333,7 +333,7 @@ export const GameOver: React.FC<GameOverProps> = ({
 }) => {
   const isDraw = winnerId === 'draw';
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50 p-4">
+    <div className="modal-overlay-scroll absolute inset-0 flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-sm z-50 p-4">
       <div className="modal-compact bg-gray-900 border-4 border-gray-700 p-4 sm:p-8 rounded-3xl flex flex-col items-center max-w-md min-w-0 w-full mx-4 shadow-2xl transform animate-bounce-in">
         <Trophy size={64} className="game-over-trophy text-yellow-400 mb-4" />
 
