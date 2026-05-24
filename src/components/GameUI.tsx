@@ -217,7 +217,7 @@ export const GameUI: React.FC<GameUIProps> = ({
       <div className="flex justify-between items-start w-full">
         {renderHealthBar(p1, false)}
 
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center shrink-0">
           <button
             onClick={onPause}
             className="pointer-events-auto bg-gray-800/80 hover:bg-gray-700 p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-white backdrop-blur-sm transition-transform hover:scale-110">

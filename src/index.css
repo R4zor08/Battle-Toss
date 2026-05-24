@@ -29,12 +29,14 @@ body {
 .game-viewport {
   width: 100%;
   height: 100svh;
+  height: 100dvh;
   height: var(--vvh, 100dvh);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   background-color: #000;
+  touch-action: none;
   padding:
     env(safe-area-inset-top, 0px)
     env(safe-area-inset-right, 0px)
@@ -49,16 +51,8 @@ body {
   background-color: #111827;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   aspect-ratio: 16 / 9;
-  width: min(
-    100%,
-    calc((var(--vvh, 100dvh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 16 / 9),
-    1200px
-  );
-  height: min(
-    100%,
-    calc((var(--vvw, 100vw) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) * 9 / 16),
-    calc(1200px * 9 / 16)
-  );
+  width: min(100%, calc(var(--vvh, 100dvh) * 16 / 9), 1200px);
+  height: min(100%, calc(var(--vvw, 100vw) * 9 / 16), calc(1200px * 9 / 16));
   max-width: 1200px;
   max-height: calc(1200px * 9 / 16);
 }
@@ -160,15 +154,13 @@ body {
     height: 2rem;
   }
 
+  .game-hud-compact .hud-wind {
+    display: none;
+  }
+
   .game-hud-compact .hud-turn-badge {
     margin-top: 0.5rem;
     padding: 0.25rem 0.625rem;
-  }
-
-  .game-hud-compact .hud-wind {
-    margin-top: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    min-width: 5rem;
   }
 
   .game-hud-compact .hud-turn-full {
@@ -222,6 +214,7 @@ body {
     max-height: 90dvh;
     overflow-y: auto;
     padding: 1rem;
+    touch-action: pan-y;
   }
 
   .modal-compact h2 {
@@ -267,10 +260,6 @@ body {
     min-height: 3rem;
   }
 
-  .game-hud-compact .hud-wind {
-    display: none;
-  }
-
   .game-hud-compact .hud-bottom-bar {
     padding-bottom: 0.25rem;
   }
@@ -285,6 +274,31 @@ body {
     justify-content: flex-start;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    touch-action: pan-y;
+  }
+
+  .char-select-content {
+    overflow-y: auto;
+    min-height: 0;
+    align-items: flex-start;
+    touch-action: pan-y;
+  }
+
+  .char-select-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .menu-btn-primary,
+  .menu-btn-secondary {
+    min-height: 44px;
+  }
+
+  .menu-audio-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .game-hud-compact .hud-health-col {
