@@ -211,7 +211,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
   const characters = Object.values(CHARACTERS);
   const maps = Object.values(MAPS);
   return (
-    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-3 sm:p-6 min-h-0 overflow-hidden">
+    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-3 sm:p-6 min-h-0 overflow-y-auto">
       <div className="char-select-header w-full flex justify-between items-center mb-2 sm:mb-8 shrink-0">
         <button
           onClick={onBack}
@@ -219,7 +219,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
           
           <RotateCcw size={20} /> BACK
         </button>
-        <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 uppercase">
+        <h2 className="text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 uppercase truncate max-w-[50%] text-center">
           {step === 1 ?
           'Player 1 Select' :
           step === 2 ?
@@ -334,10 +334,10 @@ export const GameOver: React.FC<GameOverProps> = ({
   const isDraw = winnerId === 'draw';
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50 p-4">
-      <div className="modal-compact bg-gray-900 border-4 border-gray-700 p-8 rounded-3xl flex flex-col items-center max-w-md min-w-0 w-full mx-4 shadow-2xl transform animate-bounce-in">
-        <Trophy size={64} className="text-yellow-400 mb-4" />
+      <div className="modal-compact bg-gray-900 border-4 border-gray-700 p-4 sm:p-8 rounded-3xl flex flex-col items-center max-w-md min-w-0 w-full mx-4 shadow-2xl transform animate-bounce-in">
+        <Trophy size={64} className="game-over-trophy text-yellow-400 mb-4" />
 
-        <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 mb-2 uppercase text-center">
+        <h2 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 mb-2 uppercase text-center">
           {isDraw ?
           'DRAW!' :
           `${winnerId === 'p1' ? 'PLAYER 1' : 'PLAYER 2'} WINS!`}
@@ -350,14 +350,14 @@ export const GameOver: React.FC<GameOverProps> = ({
         <div className="flex flex-col gap-4 w-full">
           <button
             onClick={onRematch}
-            className="flex items-center justify-center gap-2 bg-blue-500 text-white py-4 px-6 rounded-xl font-bold text-xl uppercase shadow-[0_6px_0_rgb(29,78,216)] hover:translate-y-1 hover:shadow-[0_3px_0_rgb(29,78,216)] active:translate-y-2 active:shadow-none transition-all">
+            className="game-over-btn flex items-center justify-center gap-2 bg-blue-500 text-white py-4 px-6 rounded-xl font-bold text-xl uppercase shadow-[0_6px_0_rgb(29,78,216)] hover:translate-y-1 hover:shadow-[0_3px_0_rgb(29,78,216)] active:translate-y-2 active:shadow-none transition-all">
             
             <RotateCcw /> Rematch
           </button>
 
           <button
             onClick={onMenu}
-            className="flex items-center justify-center gap-2 bg-gray-700 text-white py-4 px-6 rounded-xl font-bold text-xl uppercase shadow-[0_6px_0_rgb(55,65,81)] hover:translate-y-1 hover:shadow-[0_3px_0_rgb(55,65,81)] active:translate-y-2 active:shadow-none transition-all">
+            className="game-over-btn flex items-center justify-center gap-2 bg-gray-700 text-white py-4 px-6 rounded-xl font-bold text-xl uppercase shadow-[0_6px_0_rgb(55,65,81)] hover:translate-y-1 hover:shadow-[0_3px_0_rgb(55,65,81)] active:translate-y-2 active:shadow-none transition-all">
             
             <Home /> Main Menu
           </button>

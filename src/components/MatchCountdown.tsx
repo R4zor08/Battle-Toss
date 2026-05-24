@@ -180,7 +180,7 @@ export const MatchCountdown: React.FC<MatchCountdownProps> = ({
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-8 sm:gap-10 flex-1 justify-center w-full px-6 countdown-main-row">
-        <div className="flex items-center justify-center gap-5 sm:gap-8 w-full max-w-xl countdown-main-row">
+        <div className="flex items-center justify-center gap-5 sm:gap-8 w-full max-w-xl countdown-main-row countdown-fighters-row">
           <FighterCard charId={p1Char} role="Player 1" accent="blue" />
 
           <div className="relative flex flex-col items-center self-center shrink-0 w-14 h-24 animate-countdown-vs-in">

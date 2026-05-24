@@ -215,6 +215,7 @@ function GameContainer({
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
+    handleLostPointerCapture,
     activatePowerUp
   } = useGameLoop(canvasRef, initialState, onGameOver, frozen);
   return (
@@ -228,7 +229,8 @@ function GameContainer({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        onPointerLeave={handlePointerUp} />
+        onPointerLeave={handlePointerUp}
+        onLostPointerCapture={handleLostPointerCapture} />
       
       {showUI &&
       <GameUI

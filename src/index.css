@@ -84,6 +84,22 @@ body {
   animation: orientation-phone-wiggle 2.4s ease-in-out infinite;
 }
 
+.char-select-shell {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.menu-landscape-fit {
+  justify-content: flex-start;
+}
+
+/* ── Responsive tiers ──
+ * desktop: default — letterboxed shell max 1200px, full HUD
+ * landscape-compact: (orientation: landscape) and (max-height: 500px)
+ * landscape-touch: (pointer: coarse) and (orientation: landscape)
+ * landscape-tight: landscape-touch + (max-height: 400px) — scale fallbacks
+ */
+
 /* ── Landscape-compact (phone landscape) ── */
 
 @media (orientation: landscape) and (max-height: 500px) {
@@ -134,7 +150,7 @@ body {
     padding: 0.5rem;
   }
 
-  .char-select-card span.font-bold.text-lg {
+  .char-select-card .char-select-name {
     font-size: 0.875rem;
     margin-top: 0.375rem;
   }
@@ -149,12 +165,16 @@ body {
     padding: 0.75rem;
   }
 
-  .char-select-difficulty span.font-black.text-2xl {
+  .char-select-difficulty .char-select-difficulty-label {
     font-size: 1.25rem;
   }
 
   .game-hud-compact .hud-player-name {
     display: none;
+  }
+
+  .countdown-compact .countdown-fighters-row {
+    max-width: 100%;
   }
 
   .game-hud-compact .hud-health-bar {
@@ -506,16 +526,99 @@ body {
   }
 
   .countdown-compact .countdown-fighter-card {
-    width: min(22vh, 120px) !important;
+    width: min(calc(var(--vvh, 100dvh) * 0.22), 120px) !important;
   }
 
   .countdown-compact .countdown-fighter-ring {
-    width: min(12vh, 4.5rem) !important;
-    height: min(12vh, 4.5rem) !important;
+    width: min(calc(var(--vvh, 100dvh) * 0.12), 4.5rem) !important;
+    height: min(calc(var(--vvh, 100dvh) * 0.12), 4.5rem) !important;
   }
 
   .countdown-compact .countdown-digit:not(.countdown-fight-text) {
-    font-size: min(12vh, 3.5rem);
+    font-size: min(calc(var(--vvh, 100dvh) * 0.12), 3.5rem);
+  }
+
+  .countdown-compact .countdown-fighters-row {
+    max-width: 100%;
+    gap: 0.5rem;
+  }
+
+  .countdown-compact .countdown-fight-text {
+    font-size: clamp(1rem, calc(var(--vvh, 100dvh) * 0.05), 1.75rem);
+  }
+
+  .gallery-shell {
+    overflow-y: auto;
+    touch-action: pan-y;
+  }
+
+  .gallery-inner {
+    padding: 0.375rem 0.5rem;
+    padding-bottom: max(0.375rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .gallery-compact-header {
+    margin-bottom: 0.375rem;
+  }
+
+  .gallery-compact-header .gallery-title-glow {
+    font-size: 1rem;
+  }
+
+  .gallery-content {
+    gap: 0.375rem;
+  }
+
+  .gallery-card .font-bold {
+    font-size: 0.65rem;
+  }
+
+  .gallery-preview-thumb {
+    display: none;
+  }
+
+  .gallery-preview-panel {
+    padding: 0.5rem;
+  }
+
+  .gallery-preview-panel h3 {
+    font-size: 0.875rem;
+  }
+
+  .gallery-preview-avatar {
+    width: min(calc(var(--vvh, 100dvh) * 0.12), 3rem) !important;
+    height: min(calc(var(--vvh, 100dvh) * 0.12), 3rem) !important;
+  }
+
+  .modal-compact {
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 1rem;
+    touch-action: pan-y;
+  }
+
+  .modal-compact h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .game-over-trophy {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .game-over-btn {
+    min-height: 44px;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .char-select-card,
+  .char-select-map-card,
+  .char-select-difficulty,
+  .gallery-card {
+    min-height: 44px;
   }
 
   .menu-btn-primary,
@@ -563,6 +666,11 @@ body {
 
   .char-select-difficulty-desc {
     display: none;
+  }
+
+  .countdown-compact .countdown-fighters-row {
+    transform: scale(0.9);
+    transform-origin: center;
   }
 }
 /* Custom text shadow utility */

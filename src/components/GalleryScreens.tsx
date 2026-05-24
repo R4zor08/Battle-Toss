@@ -5,7 +5,11 @@ import { CHARACTERS, MAPS, WEAPONS, POWER_UPS } from '../game/data';
 import { CharacterDef, MapDef } from '../types/game';
 import { loadAvatar, subscribeAvatars } from '../utils/avatars';
 
-const CharacterAvatar: React.FC<{ char: CharacterDef; size?: number }> = ({ char, size = 96 }) => {
+const CharacterAvatar: React.FC<{ char: CharacterDef; size?: number; className?: string }> = ({
+  char,
+  size = 96,
+  className = '',
+}) => {
   const [, forceUpdate] = useState(0);
 
   useEffect(() => {
@@ -19,7 +23,7 @@ const CharacterAvatar: React.FC<{ char: CharacterDef; size?: number }> = ({ char
     const src = entry.dataUrl || char.avatarUrl;
     return (
       <div
-        className="rounded-full border-[3px] border-white/90 shadow-inner overflow-hidden flex items-center justify-center"
+        className={`rounded-full border-[3px] border-white/90 shadow-inner overflow-hidden flex items-center justify-center ${className}`}
         style={{
           width: size,
           height: size,
@@ -32,7 +36,7 @@ const CharacterAvatar: React.FC<{ char: CharacterDef; size?: number }> = ({ char
 
   return (
     <div
-      className="rounded-full border-[3px] border-white/90 shadow-inner flex items-center justify-center font-black"
+      className={`rounded-full border-[3px] border-white/90 shadow-inner flex items-center justify-center font-black ${className}`}
       style={{ width: size, height: size, backgroundColor: char.color, fontSize: size * 0.35 }}>
       {char.name.charAt(0)}
     </div>
@@ -78,7 +82,7 @@ export const MapGallery: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       <div className="gallery-ambient gallery-ambient-cyan" aria-hidden />
       <div className="gallery-ambient gallery-ambient-blue" aria-hidden />
 
-      <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
+      <div className="gallery-inner relative z-10 flex flex-col h-full p-4 sm:p-6">
         <div className="w-full max-w-6xl mx-auto flex justify-between items-center mb-4 sm:mb-6 gallery-compact-header">
           <GalleryBackButton onBack={onBack} />
           <div className="text-center">
@@ -93,7 +97,7 @@ export const MapGallery: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
 
         <div className="flex-1 overflow-y-auto min-h-0 w-full max-w-6xl mx-auto pb-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="gallery-content grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {maps.map((map, i) => {
               const isSelected = selectedId === map.id;
               const theme = MAP_THEME[map.theme];
@@ -138,7 +142,7 @@ export const MapGallery: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <div className="relative z-10 w-full max-w-6xl mx-auto mt-auto pt-3 sm:pt-4 animate-gallery-preview-in">
             <div className="gallery-preview-panel gallery-preview-map">
               <div
-                className="hidden sm:block w-36 h-24 rounded-xl bg-cover bg-center shrink-0 ring-1 ring-white/10 shadow-lg"
+                className="gallery-preview-thumb hidden sm:block w-36 h-24 rounded-xl bg-cover bg-center shrink-0 ring-1 ring-white/10 shadow-lg"
                 style={
                   selected.backgroundImageUrl
                     ? { backgroundImage: `url(${selected.backgroundImageUrl})` }
@@ -201,7 +205,7 @@ export const CharacterGallery: React.FC<{ onBack: () => void }> = ({ onBack }) =
       <div className="gallery-ambient gallery-ambient-pink" aria-hidden />
       <div className="gallery-ambient gallery-ambient-purple" aria-hidden />
 
-      <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
+      <div className="gallery-inner relative z-10 flex flex-col h-full p-4 sm:p-6">
         <div className="w-full max-w-5xl mx-auto flex justify-between items-center mb-4 sm:mb-6 gallery-compact-header">
           <GalleryBackButton onBack={onBack} />
           <div className="text-center">
@@ -216,7 +220,7 @@ export const CharacterGallery: React.FC<{ onBack: () => void }> = ({ onBack }) =
         </div>
 
         <div className="flex-1 overflow-y-auto min-h-0 w-full max-w-5xl mx-auto pb-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="gallery-content grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {characters.map((char, i) => {
               const isSelected = selectedId === char.id;
               const weaponName = formatWeaponName(char.weaponId);
@@ -261,7 +265,7 @@ export const CharacterGallery: React.FC<{ onBack: () => void }> = ({ onBack }) =
             <div
               className="gallery-preview-panel gallery-preview-character"
               style={{ ['--char-color' as string]: selected.color }}>
-              <CharacterAvatar char={selected} size={72} />
+              <CharacterAvatar char={selected} size={72} className="gallery-preview-avatar" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <Swords size={14} className="text-fuchsia-400 shrink-0" />

@@ -271,6 +271,7 @@ export const GameUI: React.FC<GameUIProps> = ({
                 key={puId}
                 onClick={() => onActivatePowerUp(puId)}
                 disabled={!canAfford || currentPlayer.activePowerUp !== null}
+                aria-label={`${pu.name}: ${pu.description} (${pu.cost} power)`}
                 className={`hud-powerup-btn relative group flex flex-col items-center justify-center w-14 h-14 sm:w-20 sm:h-20 rounded-xl border-2 transition-all flex-shrink-0
                     ${isActive ? 'border-yellow-400 bg-yellow-400/20 scale-110 shadow-[0_0_15px_rgba(250,204,21,0.5)]' : canAfford && !currentPlayer.activePowerUp ? 'border-blue-400 bg-blue-900/50 hover:bg-blue-800/80 hover:scale-105 cursor-pointer' : 'border-gray-600 bg-gray-800/50 opacity-50 cursor-not-allowed'}
                   `}>

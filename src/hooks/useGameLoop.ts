@@ -131,6 +131,20 @@ frozen: boolean = false) =>
     }
   };
 
+  const cancelAimDrag = () => {
+    const state = stateRef.current;
+    state.aimDragStart = null;
+    state.aimDragCurrent = null;
+  };
+
+  const handleLostPointerCapture = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (frozenRef.current) return;
+    if (activePointerId.current === e.pointerId) {
+      activePointerId.current = null;
+      cancelAimDrag();
+    }
+  };
+
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (frozenRef.current) return;
     initAudio();
@@ -141,6 +155,7 @@ frozen: boolean = false) =>
     const point = mapPointerToCanvas(e.clientX, e.clientY);
     if (!point) return;
 
+    e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
     activePointerId.current = e.pointerId;
 
@@ -208,6 +223,7 @@ frozen: boolean = false) =>
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
+    handleLostPointerCapture,
     activatePowerUp
   };
 };
