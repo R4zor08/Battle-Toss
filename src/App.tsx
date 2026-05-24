@@ -3,6 +3,11 @@ import { ScreenState, GameEngineState } from './types/game';
 import { createInitialGameState } from './game/engine';
 import { useGameLoop } from './hooks/useGameLoop';
 import {
+  initAudio,
+  startMenuMusic,
+  stopMenuMusic
+} from './audio/soundManager';
+import {
   MainMenu,
   CharacterSelect,
   GameOver,
@@ -11,6 +16,7 @@ import {
   CharacterGallery } from
 './components/Screens';
 import { GameUI } from './components/GameUI';
+import { MatchCountdown } from './components/MatchCountdown';
 import { GAME_CONSTANTS } from './game/constants';
 export function App() {
   const [screen, setScreen] = useState<ScreenState>('loading');
@@ -34,6 +40,18 @@ export function App() {
     const timer = setTimeout(() => setScreen('menu'), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (screen === 'menu') {
+      initAudio();
+      startMenuMusic();
+    } else {
+      stopMenuMusic();
+    }
+    return () => {
+      if (screen !== 'menu') stopMenuMusic();
+    };
+  }, [screen]);
   const handleStartGame = (mode: 'ai' | 'local') => {
     setGameMode(mode);
     setScreen('characterSelect');
@@ -63,7 +81,7 @@ export function App() {
     (initialState as any).difficulty = difficulty;
     setGameState(initialState);
     setGameKey((k) => k + 1);
-    setScreen('playing');
+    setScreen('countdown');
   };
   const handleGameOver = (_winnerId: string) => {
     setScreen('gameOver');
@@ -78,7 +96,7 @@ export function App() {
     (initialState as any).difficulty = config.difficulty;
     setGameState(initialState);
     setGameKey((k) => k + 1);
-    setScreen('playing');
+    setScreen('countdown');
     setIsPaused(false);
   };
   return (
@@ -113,13 +131,26 @@ export function App() {
 
         }
 
-        {(screen === 'playing' || screen === 'gameOver') && gameState &&
+        {(screen === 'countdown' || screen === 'playing' || screen === 'gameOver') && gameState &&
         <GameContainer
           key={gameKey}
           canvasRef={canvasRef}
           initialState={gameState}
+          frozen={screen === 'countdown'}
+          showUI={screen === 'playing'}
           onGameOver={handleGameOver}
           onPauseToggle={() => setIsPaused(!isPaused)} />
+
+        }
+
+        {screen === 'countdown' && gameState &&
+        <MatchCountdown
+          p1Char={config.p1Char}
+          p2Char={config.p2Char}
+          mapId={config.mapId}
+          mode={gameMode}
+          difficulty={config.difficulty}
+          onComplete={() => setScreen('playing')} />
 
         }
 
@@ -179,7 +210,9 @@ function GameContainer({
   canvasRef,
   initialState,
   onGameOver,
-  onPauseToggle
+  onPauseToggle,
+  frozen = false,
+  showUI = true
 }: any) {
   const {
     gameState,
@@ -187,7 +220,7 @@ function GameContainer({
     handlePointerMove,
     handlePointerUp,
     activatePowerUp
-  } = useGameLoop(canvasRef, initialState, onGameOver);
+  } = useGameLoop(canvasRef, initialState, onGameOver, frozen);
   return (
     <>
       <canvas
@@ -200,10 +233,12 @@ function GameContainer({
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp} />
       
+      {showUI &&
       <GameUI
         state={gameState}
         onActivatePowerUp={activatePowerUp}
         onPause={onPauseToggle} />
+      }
       
     </>);
 

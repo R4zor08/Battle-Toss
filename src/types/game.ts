@@ -7,6 +7,7 @@ export type ScreenState =
 'loading' |
 'menu' |
 'characterSelect' |
+'countdown' |
 'mapSelect' |
 'playing' |
 'gameOver' |

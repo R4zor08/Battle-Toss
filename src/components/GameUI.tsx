@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { GameEngineState } from '../types/game';
 import { CHARACTERS, POWER_UPS } from '../game/data';
 import { GAME_CONSTANTS } from '../game/constants';
-import { Settings, Zap } from 'lucide-react';
+import { Settings, Zap, Wind } from 'lucide-react';
 import { loadAvatar, subscribeAvatars } from '../utils/avatars';
 const AIDebugOverlay: React.FC<{
   state: GameEngineState;
@@ -104,6 +104,50 @@ const HudAvatar: React.FC<{
     </div>);
 
 };
+const WindIndicator: React.FC<{
+  state: GameEngineState;
+}> = ({ state }) => {
+  if (state.phase !== 'aiming') return null;
+
+  const wind = state.wind;
+  const absWind = Math.abs(wind);
+  const maxWind = GAME_CONSTANTS.WIND_MAX;
+  const barWidth = Math.min(100, (absWind / maxWind) * 100);
+  const direction =
+  absWind < 0.15 ? '—' : wind < 0 ? '←' : '→';
+  const label =
+  absWind < 0.15 ?
+  'Calm' :
+  `${Math.abs(wind).toFixed(1)} ${wind < 0 ? '←' : '→'}`;
+
+  return (
+    <div
+      key={state.turnCount}
+      className="mt-2 bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm border border-cyan-500/30 flex flex-col items-center gap-1 min-w-[120px]">
+      
+      <div className="flex items-center gap-1.5 text-cyan-300 text-[10px] font-black uppercase tracking-wider">
+        <Wind size={12} />
+        Wind
+      </div>
+      <div className="flex items-center gap-2 w-full">
+        <span className="text-white font-bold text-xs w-4 text-center">{direction}</span>
+        <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden flex">
+          {wind < 0 &&
+          <div
+            className="ml-auto h-full bg-gradient-to-l from-cyan-400 to-blue-400 rounded-full transition-all duration-300"
+            style={{ width: `${barWidth}%` }} />
+          }
+          {wind >= 0 &&
+          <div
+            className="h-full bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full transition-all duration-300"
+            style={{ width: `${barWidth}%` }} />
+          }
+        </div>
+        <span className="text-cyan-200 font-mono text-[10px] w-12 text-right">{label}</span>
+      </div>
+    </div>);
+
+};
 interface GameUIProps {
   state: GameEngineState;
   onActivatePowerUp: (id: string) => void;
@@ -200,6 +244,7 @@ export const GameUI: React.FC<GameUIProps> = ({
               </span>
             }
           </div>
+          <WindIndicator state={state} />
         </div>
 
         {renderHealthBar(p2, true)}

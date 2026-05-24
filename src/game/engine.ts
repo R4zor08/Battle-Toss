@@ -1,10 +1,7 @@
 import {
   GameEngineState,
   Player,
-  Projectile,
-  Vector2D,
-  Particle,
-  FloatingText } from
+  Vector2D } from
 '../types/game';
 import { GAME_CONSTANTS } from './constants';
 import { CHARACTERS, WEAPONS, POWER_UPS } from './data';
@@ -12,9 +9,9 @@ import {
   distance,
   randomRange,
   checkCircleRectCollision,
-  normalize,
   lerp } from
 '../utils/math';
+import { playSfx } from '../audio/soundManager';
 
 export const createInitialGameState = (
 p1CharId: string,
@@ -60,7 +57,7 @@ mapId: string)
     particles: [],
     floatingTexts: [],
     mapId,
-    wind: randomRange(-2, 2),
+    wind: randomRange(GAME_CONSTANTS.WIND_MIN, GAME_CONSTANTS.WIND_MAX),
     camera: {
       offset: { x: 0, y: 0 },
       shake: 0,
@@ -124,6 +121,7 @@ const applyHeal = (
   player.hp = Math.min(player.maxHp, player.hp + amount);
   const healed = player.hp - before;
   if (healed > 0) {
+    playSfx('heal');
     addFloatingText(
       state,
       `+${healed}`,
@@ -155,6 +153,7 @@ export const activatePowerUpForPlayer = (
   }
 
   player.activePowerUp = powerUpId;
+  playSfx('powerUp');
   return true;
 };
 
@@ -165,6 +164,8 @@ const executeTechniqueShot = (
   const currentPlayer = state.players[state.currentTurnIndex];
   const enemy = state.players.find((p) => p.id !== currentPlayer.id);
   if (!enemy) return;
+
+  playSfx('technique');
 
   if (powerUp === 'space_phase') {
     const approachDir =
@@ -230,9 +231,6 @@ angle: number) =>
   const charDef = CHARACTERS[currentPlayer.characterId];
   const weaponDef = WEAPONS[charDef.weaponId];
 
-  const velocityX = Math.cos(angle) * power * weaponDef.speedMultiplier;
-  const velocityY = Math.sin(angle) * power * weaponDef.speedMultiplier;
-
   const powerUp = currentPlayer.activePowerUp;
 
   if (powerUp === 'space_phase' || powerUp === 'space_orbital') {
@@ -247,6 +245,8 @@ angle: number) =>
     count = 3;
     spread = 0.15;
   }
+
+  playSfx('throw');
 
   for (let i = 0; i < count; i++) {
     const currentAngle = angle + (i - Math.floor(count / 2)) * spread;
@@ -348,6 +348,8 @@ export const updateEngine = (state: GameEngineState) => {
       proj.velocity.y += GAME_CONSTANTS.GRAVITY * weaponDef.gravityScale;
     }
 
+    proj.velocity.x += state.wind * GAME_CONSTANTS.WIND_ACCEL;
+
     proj.rotation += weaponDef.spinSpeed * (proj.velocity.x > 0 ? 1 : -1);
 
     // Trail
@@ -372,6 +374,7 @@ export const updateEngine = (state: GameEngineState) => {
       state.camera.shake = 5;
 
       if (proj.modifiers.explosive) {
+        playSfx('explosion');
         createExplosion(state, proj.position, '#ff5500', 30);
         state.camera.shake = 15;
         // Apply AOE damage
@@ -420,6 +423,7 @@ export const updateEngine = (state: GameEngineState) => {
         (weaponDef.baseDamage[1] - weaponDef.baseDamage[0]) * 0.2;
         if (isCrit) {
           damage *= 1.5;
+          playSfx('crit');
           state.hitStopFrames = 5;
           state.camera.shake = 20;
           addFloatingText(
@@ -430,6 +434,7 @@ export const updateEngine = (state: GameEngineState) => {
             30
           );
         } else {
+          playSfx('hit');
           state.camera.shake = 10;
         }
 
@@ -439,6 +444,7 @@ export const updateEngine = (state: GameEngineState) => {
         );
         if (shieldEffect) {
           damage *= 0.5;
+          playSfx('shield');
           addFloatingText(
             state,
             'SHIELDED',
@@ -469,6 +475,7 @@ export const updateEngine = (state: GameEngineState) => {
         }
 
         if (proj.modifiers.explosive) {
+          playSfx('explosion');
           createExplosion(state, proj.position, '#ff5500', 30);
           state.camera.shake = 15;
         }
@@ -534,7 +541,7 @@ const applyDamage = (
 state: GameEngineState,
 player: Player,
 amount: number,
-sourceId: string) =>
+_sourceId: string) =>
 {
   player.hp = Math.max(0, player.hp - amount);
 
@@ -560,7 +567,8 @@ const endTurn = (state: GameEngineState) => {
   state.currentTurnIndex = (state.currentTurnIndex + 1) % state.players.length;
   state.phase = 'aiming';
   state.turnCount++;
-  state.wind = randomRange(-2, 2);
+  state.wind = randomRange(GAME_CONSTANTS.WIND_MIN, GAME_CONSTANTS.WIND_MAX);
+  playSfx('turn');
 
   const currentPlayer = state.players[state.currentTurnIndex];
 

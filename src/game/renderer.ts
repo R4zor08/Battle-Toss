@@ -492,14 +492,16 @@ state: GameEngineState) =>
   let simX = startX;
   let simY = startY;
   let simVy = vy;
+  let simVx = vx;
 
   ctx.moveTo(simX, simY);
 
   const noGravity = currentPlayer.activePowerUp === 'ninja_straight';
 
   for (let i = 0; i < GAME_CONSTANTS.TRAJECTORY_DOTS; i++) {
-    simX += vx * GAME_CONSTANTS.TRAJECTORY_STEP;
+    simX += simVx * GAME_CONSTANTS.TRAJECTORY_STEP;
     simY += simVy * GAME_CONSTANTS.TRAJECTORY_STEP;
+    simVx += state.wind * GAME_CONSTANTS.WIND_ACCEL * GAME_CONSTANTS.TRAJECTORY_STEP;
     if (!noGravity) {
       simVy +=
       GAME_CONSTANTS.GRAVITY *

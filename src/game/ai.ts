@@ -334,6 +334,7 @@ export const calculateAIAim = (
       x += vx;
       y += vy;
       vy += grav;
+      vx += state.wind * GAME_CONSTANTS.WIND_ACCEL;
       const ddx = Math.abs(x - targetX);
       const ddy = Math.abs(y - targetY);
       const d = Math.hypot(ddx, ddy);

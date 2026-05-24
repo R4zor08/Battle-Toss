@@ -29,3 +29,386 @@ body {
 .animate-bounce-in {
   animation: bounce-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+
+@keyframes countdown-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  40% { transform: scale(1.15); opacity: 1; }
+  70% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.85; }
+}
+
+@keyframes vs-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes fight-flash {
+  0% { transform: scale(0.5); opacity: 0; filter: brightness(2); }
+  30% { transform: scale(1.25); opacity: 1; filter: brightness(1.5); }
+  60% { transform: scale(1.05); opacity: 1; filter: brightness(1); }
+  100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+}
+
+@keyframes countdown-flash {
+  0% { opacity: 0; }
+  20% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+.animate-countdown-pop {
+  animation: countdown-pop 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-vs-pulse {
+  animation: vs-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-fight-flash {
+  animation: fight-flash 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-countdown-screen-flash {
+  animation: countdown-flash 0.4s ease-out forwards;
+}
+
+.countdown-vignette {
+  box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.55);
+}
+
+@keyframes countdown-ring {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.animate-countdown-ring {
+  animation: countdown-ring 0.9s ease-out forwards;
+}
+
+.animate-countdown-ring-delayed {
+  animation: countdown-ring 0.9s ease-out 0.12s forwards;
+}
+
+/* ── Countdown overlay enhancements ── */
+
+@keyframes countdown-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-countdown-overlay-in {
+  animation: countdown-overlay-in 0.35s ease-out forwards;
+}
+
+@keyframes countdown-meta-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-countdown-meta-in {
+  animation: countdown-meta-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.countdown-meta-pill {
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 640px) {
+  .countdown-meta-pill {
+    font-size: 0.75rem;
+  }
+}
+
+.countdown-letterbox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.countdown-letterbox-bottom {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.countdown-letterbox-top {
+  top: 0;
+}
+
+.countdown-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 50% 48%, rgba(255, 255, 255, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes countdown-enter-left {
+  from { opacity: 0; transform: translateX(-28px) scale(0.92); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes countdown-enter-right {
+  from { opacity: 0; transform: translateX(28px) scale(0.92); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.animate-countdown-enter-left {
+  animation: countdown-enter-left 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+.animate-countdown-enter-right {
+  animation: countdown-enter-right 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+@keyframes countdown-ring-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-countdown-ring-spin {
+  animation: countdown-ring-spin 4s linear infinite;
+}
+
+@keyframes countdown-avatar-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.animate-countdown-avatar-float {
+  animation: countdown-avatar-float 2.4s ease-in-out infinite;
+}
+
+@keyframes countdown-vs-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-countdown-vs-in {
+  animation: countdown-vs-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+}
+
+.countdown-vs-text {
+  font-size: 0.875rem;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.28em;
+  color: transparent;
+  background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 50%, #f8fafc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
+}
+
+@media (min-width: 640px) {
+  .countdown-vs-text {
+    font-size: 1rem;
+  }
+}
+
+.countdown-clash-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 52px;
+  margin-top: -26px;
+  margin-left: -1px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.35), transparent);
+  border-radius: 1px;
+}
+
+.countdown-clash-line-a {
+  transform: rotate(28deg);
+  animation: countdown-clash-pulse 1.8s ease-in-out infinite;
+}
+
+.countdown-clash-line-b {
+  transform: rotate(-28deg);
+  animation: countdown-clash-pulse-b 1.8s ease-in-out infinite;
+}
+
+@keyframes countdown-clash-pulse {
+  0%, 100% { opacity: 0.35; transform: rotate(28deg) scaleY(0.85); }
+  50% { opacity: 0.85; transform: rotate(28deg) scaleY(1.05); }
+}
+
+@keyframes countdown-clash-pulse-b {
+  0%, 100% { opacity: 0.35; transform: rotate(-28deg) scaleY(0.85); }
+  50% { opacity: 0.85; transform: rotate(-28deg) scaleY(1.05); }
+}
+
+.countdown-number-text {
+  color: transparent;
+  background: linear-gradient(180deg, #fef3c7 0%, #fb923c 45%, #ea580c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+  filter: drop-shadow(0 0 24px rgba(251, 146, 60, 0.45)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6));
+}
+
+.countdown-fight-text {
+  color: transparent;
+  background: linear-gradient(90deg, #fde68a 0%, #fb923c 50%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.5));
+}
+
+.countdown-fight-burst {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.28) 0%, rgba(249, 115, 22, 0.12) 45%, transparent 70%);
+}
+
+@keyframes countdown-fight-burst {
+  from { transform: scale(0.4); opacity: 0; }
+  40% { opacity: 1; }
+  to { transform: scale(1.4); opacity: 0; }
+}
+
+.animate-countdown-fight-burst {
+  animation: countdown-fight-burst 0.65s ease-out forwards;
+}
+
+.countdown-fight-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+  animation: countdown-fight-sweep 0.45s ease-out forwards;
+}
+
+@keyframes countdown-fight-sweep {
+  from { transform: translateX(-100%); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+/* ── Gallery screens (Maps & Characters) ── */
+
+.gallery-shell {
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(30, 58, 95, 0.25) 0%, transparent 55%),
+    #0a0e17;
+}
+
+.gallery-ambient {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.gallery-ambient-cyan {
+  width: 280px;
+  height: 280px;
+  top: -80px;
+  left: 10%;
+  background: rgba(34, 211, 238, 0.35);
+}
+
+.gallery-ambient-blue {
+  width: 320px;
+  height: 320px;
+  bottom: 10%;
+  right: 5%;
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.gallery-ambient-pink {
+  width: 280px;
+  height: 280px;
+  top: -60px;
+  right: 15%;
+  background: rgba(236, 72, 153, 0.3);
+}
+
+.gallery-ambient-purple {
+  width: 300px;
+  height: 300px;
+  bottom: 5%;
+  left: 10%;
+  background: rgba(168, 85, 247, 0.25);
+}
+
+.gallery-title-glow {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.08));
+}
+
+@keyframes gallery-card-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-gallery-card-in {
+  animation: gallery-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes gallery-preview-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-gallery-preview-in {
+  animation: gallery-preview-in 0.35s ease-out both;
+}
+
+.gallery-card {
+  padding: 0.65rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+}
+
+.gallery-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.gallery-card-selected {
+  transform: translateY(-2px);
+}
+
+.gallery-card-map-selected {
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.gallery-card-char-selected {
+  border-color: color-mix(in srgb, var(--char-color) 55%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--char-color) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.gallery-preview-panel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.gallery-preview-map {
+  border-color: rgba(34, 211, 238, 0.2);
+}
+
+.gallery-preview-character {
+  border-color: color-mix(in srgb, var(--char-color) 35%, transparent);
+}
