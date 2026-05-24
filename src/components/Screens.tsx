@@ -58,6 +58,7 @@ import {
 } from '../audio/soundManager';
 import { CHARACTERS, MAPS } from '../game/data';
 import { ScreenState } from '../types/game';
+import { MenuBackground, MenuLogo } from './MenuLogo';
 import {
   Play,
   Users,
@@ -67,8 +68,7 @@ import {
   Volume2,
   VolumeX,
   Music
-} from
-'lucide-react';
+} from 'lucide-react';
 interface MenuProps {
   onStartGame: (mode: 'ai' | 'local') => void;
   onNavigate?: (screen: ScreenState) => void;
@@ -94,76 +94,58 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-blue-900 to-purple-900 overflow-hidden">
+    <div className="menu-shell absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
+      <MenuBackground />
+
       <div className="absolute top-4 right-4 z-20 flex gap-2">
         <button
           onClick={toggleSfx}
-          className="p-2 rounded-full bg-black/40 text-white hover:bg-black/60 border border-white/20"
+          className={`menu-audio-btn ${audio.sfxMuted ? 'menu-audio-btn-muted' : ''}`}
           aria-label="Toggle sound effects">
           {audio.sfxMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </button>
         <button
           onClick={toggleMusic}
-          className={`p-2 rounded-full bg-black/40 text-white hover:bg-black/60 border border-white/20 ${audio.musicMuted ? 'opacity-50 line-through' : ''}`}
+          className={`menu-audio-btn ${audio.musicMuted ? 'menu-audio-btn-muted' : ''}`}
           aria-label="Toggle music">
           <Music size={20} />
         </button>
       </div>
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full mix-blend-overlay filter blur-xl animate-pulse"></div>
-        <div
-          className="absolute bottom-20 right-20 w-64 h-64 bg-pink-500 rounded-full mix-blend-overlay filter blur-3xl animate-pulse"
-          style={{
-            animationDelay: '1s'
-          }}>
-        </div>
-      </div>
 
-      <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 mb-2 filter drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] transform -rotate-2 hover:rotate-0 transition-transform cursor-default">
-        BATTLE TOSS
-      </h1>
-      <h2 className="text-4xl md:text-6xl font-black text-white mb-12 tracking-widest filter drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
-        MASTERS
-      </h2>
+      <MenuLogo />
 
-      <div className="flex flex-col gap-6 w-full max-w-md px-4 z-10">
+      <div className="flex flex-col items-center gap-4 w-full max-w-sm px-4 z-10">
         <button
           onClick={() => handleMenuAction(() => onStartGame('ai'))}
-          className="group relative flex items-center justify-center gap-3 bg-gradient-to-r from-green-400 to-emerald-600 text-white py-4 px-8 rounded-full font-black text-2xl uppercase tracking-wider shadow-[0_10px_0_rgb(4,120,87)] hover:translate-y-1 hover:shadow-[0_5px_0_rgb(4,120,87)] active:translate-y-2 active:shadow-none transition-all">
-          
-          <Play fill="currentColor" />
+          className="menu-btn-primary menu-btn-primary-green">
+          <Play fill="currentColor" size={22} />
           Play vs AI
-          <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
         </button>
 
         <button
           onClick={() => handleMenuAction(() => onStartGame('local'))}
-          className="group relative flex items-center justify-center gap-3 bg-gradient-to-r from-blue-400 to-indigo-600 text-white py-4 px-8 rounded-full font-black text-2xl uppercase tracking-wider shadow-[0_10px_0_rgb(55,48,163)] hover:translate-y-1 hover:shadow-[0_5px_0_rgb(55,48,163)] active:translate-y-2 active:shadow-none transition-all">
-          
-          <Users />
+          className="menu-btn-primary menu-btn-primary-blue">
+          <Users size={22} />
           Local 2 Player
-          <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
         </button>
 
-        {onNavigate &&
-        <div className="grid grid-cols-2 gap-4 mt-2">
+        {onNavigate && (
+          <div className="grid grid-cols-2 gap-3 w-full mt-1">
             <button
-            onClick={() => handleMenuAction(() => onNavigate('characterGallery' as ScreenState))}
-            className="bg-gray-800 text-white py-3 rounded-xl font-bold uppercase shadow-[0_4px_0_rgb(31,41,55)] hover:translate-y-1 hover:shadow-[0_2px_0_rgb(31,41,55)] active:translate-y-2 active:shadow-none transition-all">
-            
+              onClick={() => handleMenuAction(() => onNavigate('characterGallery' as ScreenState))}
+              className="menu-btn-secondary">
               Characters
             </button>
             <button
-            onClick={() => handleMenuAction(() => onNavigate('mapGallery' as ScreenState))}
-            className="bg-gray-800 text-white py-3 rounded-xl font-bold uppercase shadow-[0_4px_0_rgb(31,41,55)] hover:translate-y-1 hover:shadow-[0_2px_0_rgb(31,41,55)] active:translate-y-2 active:shadow-none transition-all">
-            
+              onClick={() => handleMenuAction(() => onNavigate('mapGallery' as ScreenState))}
+              className="menu-btn-secondary">
               Maps
             </button>
           </div>
-        }
+        )}
       </div>
-    </div>);
+    </div>
+  );
 
 };
 export { MapGallery, CharacterGallery } from './GalleryScreens';
