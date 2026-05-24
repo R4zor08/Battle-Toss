@@ -165,22 +165,26 @@ export const GameUI: React.FC<GameUIProps> = ({
   const p2 = state.players[1];
   const currentPlayer = state.players[state.currentTurnIndex];
   const isP1Turn = state.currentTurnIndex === 0;
-  const showAimTimer =
+  const aimTurnRemainingMs =
     state.phase === 'aiming' &&
     !currentPlayer.isAI &&
-    state.aimTurnRemainingMs !== null;
-  const aimTimerSeconds = showAimTimer
-    ? Math.ceil(state.aimTurnRemainingMs / 1000)
+    state.aimTurnRemainingMs !== null
+      ? state.aimTurnRemainingMs
+      : null;
+  const showAimTimer = aimTurnRemainingMs !== null;
+  const aimTimerSeconds = aimTurnRemainingMs !== null
+    ? Math.ceil(aimTurnRemainingMs / 1000)
     : 0;
   const aimTimerClass =
-    showAimTimer && state.aimTurnRemainingMs <= 1000
+    aimTurnRemainingMs !== null && aimTurnRemainingMs <= 1000
       ? 'hud-turn-timer hud-turn-timer-urgent'
-      : showAimTimer && state.aimTurnRemainingMs <= 2000
+      : aimTurnRemainingMs !== null && aimTurnRemainingMs <= 2000
         ? 'hud-turn-timer hud-turn-timer-warn'
         : 'hud-turn-timer';
-  const aimTimerProgress = showAimTimer
-    ? Math.max(0, Math.min(100, (state.aimTurnRemainingMs / GAME_CONSTANTS.AIM_TURN_MS) * 100))
-    : 0;
+  const aimTimerProgress =
+    aimTurnRemainingMs !== null
+      ? Math.max(0, Math.min(100, (aimTurnRemainingMs / GAME_CONSTANTS.AIM_TURN_MS) * 100))
+      : 0;
   const renderHealthBar = (player: any, isRight: boolean) => {
     const charDef = CHARACTERS[player.characterId];
     const hpPercent = Math.max(0, player.hp / player.maxHp * 100);
