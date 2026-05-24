@@ -233,9 +233,9 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
         <div className="w-20"></div>
       </div>
 
-      <div className="char-select-content flex-1 flex items-center justify-center w-full max-w-4xl min-h-0">
+      <div className="char-select-content flex-1 flex items-start justify-center w-full max-w-4xl min-h-0">
         {step < 3 ?
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+        <div className="char-select-grid char-select-grid--chars grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
             {characters.map((char) => {
             const isSelected =
             step === 1 ? p1Char === char.id : p2Char === char.id;
@@ -248,10 +248,10 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                 className={`char-select-card flex flex-col items-center p-4 rounded-2xl border-4 transition-all ${isSelected ? 'border-yellow-400 bg-gray-800 scale-105 shadow-[0_0_20px_rgba(250,204,21,0.5)]' : 'border-gray-700 bg-gray-800/50 hover:border-gray-500'}`}>
                 
                   <CharacterAvatar char={char} size={96} className="char-select-avatar" />
-                  <span className="font-bold text-lg text-center mt-3">
+                  <span className="char-select-name font-bold text-lg text-center mt-3">
                     {char.name}
                   </span>
-                  <span className="text-sm text-gray-400 mt-1 capitalize">
+                  <span className="char-select-weapon text-sm text-gray-400 mt-1 capitalize">
                     {char.weaponId}
                   </span>
                 </button>);
@@ -259,17 +259,17 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
           })}
           </div> :
         step === 3 ?
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
+        <div className="char-select-grid char-select-grid--maps grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
             {maps.map((map) => {
             const isSelected = mapId === map.id;
             return (
               <button
                 key={map.id}
                 onClick={() => setMapId(map.id)}
-                className={`flex flex-col items-center p-2 rounded-2xl border-4 transition-all overflow-hidden ${isSelected ? 'border-yellow-400 scale-105 shadow-[0_0_20px_rgba(250,204,21,0.5)]' : 'border-gray-700 hover:border-gray-500'}`}>
+                className={`char-select-map-card flex flex-col items-center p-2 rounded-2xl border-4 transition-all overflow-hidden ${isSelected ? 'border-yellow-400 scale-105 shadow-[0_0_20px_rgba(250,204,21,0.5)]' : 'border-gray-700 hover:border-gray-500'}`}>
                 
                   <div
-                  className="w-full h-24 rounded-xl mb-2 bg-cover bg-center"
+                  className="char-select-map-thumb w-full h-24 rounded-xl mb-2 bg-cover bg-center"
                   style={
                   map.backgroundImageUrl ?
                   {
@@ -280,7 +280,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                   }
                   } />
                 
-                  <span className="font-bold text-base pb-1 text-center">
+                  <span className="char-select-map-name font-bold text-base pb-1 text-center">
                     {map.name}
                   </span>
                 </button>);
@@ -288,7 +288,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
           })}
           </div> :
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+        <div className="char-select-grid char-select-grid--difficulty grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
             {DIFFICULTIES.map((d) => {
             const isSelected = difficulty === d.id;
             return (
@@ -297,10 +297,10 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                 onClick={() => setDifficulty(d.id)}
                 className={`char-select-difficulty flex flex-col items-start p-4 sm:p-6 rounded-2xl border-4 transition-all bg-gradient-to-br ${d.color} ${isSelected ? 'border-yellow-400 scale-105 shadow-[0_0_25px_rgba(250,204,21,0.6)]' : 'border-gray-700 hover:border-gray-400 opacity-80 hover:opacity-100'}`}>
                 
-                  <span className="font-black text-2xl text-white tracking-wider drop-shadow">
+                  <span className="char-select-difficulty-label font-black text-2xl text-white tracking-wider drop-shadow">
                     {d.label}
                   </span>
-                  <span className="text-sm text-white/90 mt-1 text-left">
+                  <span className="char-select-difficulty-desc text-sm text-white/90 mt-1 text-left">
                     {d.desc}
                   </span>
                 </button>);
@@ -310,12 +310,14 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
         }
       </div>
 
+      <div className="char-select-footer shrink-0 w-full flex justify-center">
       <button
         onClick={handleNext}
-        className="char-select-battle-btn mt-8 shrink-0 bg-gradient-to-r from-yellow-400 to-orange-500 text-black py-4 px-12 rounded-full font-black text-2xl uppercase tracking-wider shadow-[0_8px_0_rgb(194,65,12)] hover:translate-y-1 hover:shadow-[0_4px_0_rgb(194,65,12)] active:translate-y-2 active:shadow-none transition-all">
+        className="char-select-battle-btn mt-2 sm:mt-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-black py-4 px-12 rounded-full font-black text-2xl uppercase tracking-wider shadow-[0_8px_0_rgb(194,65,12)] hover:translate-y-1 hover:shadow-[0_4px_0_rgb(194,65,12)] active:translate-y-2 active:shadow-none transition-all">
         
         {step === finalStep ? 'BATTLE!' : 'NEXT'}
       </button>
+      </div>
     </div>);
 
 };

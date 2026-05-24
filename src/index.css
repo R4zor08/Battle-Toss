@@ -87,6 +87,18 @@ body {
 /* ── Landscape-compact (phone landscape) ── */
 
 @media (orientation: landscape) and (max-height: 500px) {
+  .game-viewport {
+    align-items: center;
+  }
+
+  .game-shell {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 16 / 9;
+  }
+
   .menu-title-stack {
     margin-top: min(12vw, 48px);
   }
@@ -361,6 +373,13 @@ body {
     font-size: 0.7rem;
   }
 
+  .char-select-shell {
+    padding: 0.375rem 0.5rem;
+    padding-bottom: max(0.375rem, env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    touch-action: pan-y;
+  }
+
   .char-select-content {
     overflow-y: auto;
     min-height: 0;
@@ -374,6 +393,116 @@ body {
 
   .char-select-header h2 {
     font-size: 1.125rem;
+  }
+
+  .char-select-grid--chars {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.375rem;
+  }
+
+  .char-select-grid--maps {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.375rem;
+  }
+
+  .char-select-grid--difficulty {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.375rem;
+  }
+
+  .char-select-avatar {
+    width: min(calc(var(--vvh, 100dvh) * 0.11), 48px) !important;
+    height: min(calc(var(--vvh, 100dvh) * 0.11), 48px) !important;
+  }
+
+  .char-select-card {
+    padding: 0.25rem;
+    border-width: 2px;
+  }
+
+  .char-select-card .char-select-name {
+    font-size: 0.65rem;
+    margin-top: 0.125rem;
+  }
+
+  .char-select-card .char-select-weapon {
+    font-size: 0.55rem;
+    margin-top: 0.125rem;
+  }
+
+  .char-select-map-thumb {
+    height: min(calc(var(--vvh, 100dvh) * 0.14), 56px);
+    margin-bottom: 0.25rem;
+  }
+
+  .char-select-map-card {
+    padding: 0.25rem;
+    border-width: 2px;
+  }
+
+  .char-select-map-card .char-select-map-name {
+    font-size: 0.65rem;
+    padding-bottom: 0.125rem;
+  }
+
+  .char-select-difficulty {
+    padding: 0.375rem 0.5rem;
+    border-width: 2px;
+  }
+
+  .char-select-difficulty .char-select-difficulty-label {
+    font-size: 0.75rem;
+  }
+
+  .char-select-difficulty .char-select-difficulty-desc {
+    font-size: 0.65rem;
+    margin-top: 0.125rem;
+  }
+
+  .char-select-battle-btn {
+    margin-top: 0.375rem;
+    padding: 0.375rem 1.5rem;
+    font-size: clamp(0.75rem, calc(var(--vvh, 100dvh) * 0.025), 1rem);
+  }
+
+  .char-select-footer {
+    flex-shrink: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .game-hud-compact {
+    padding: 0.25rem;
+  }
+
+  .game-hud-compact .hud-bottom-bar {
+    padding-bottom: max(0.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .game-hud-compact .hud-powerup-btn {
+    width: min(calc(var(--vvh, 100dvh) * 0.1), 2.75rem);
+    height: min(calc(var(--vvh, 100dvh) * 0.1), 2.75rem);
+  }
+
+  .game-hud-compact .hud-powerup-label {
+    display: none;
+  }
+
+  .game-hud-compact .hud-powerup-cost {
+    width: 1.25rem;
+    height: 1.25rem;
+    top: -0.25rem;
+    right: -0.25rem;
+    font-size: 0.625rem;
+  }
+
+  .game-hud-compact .hud-turn-badge {
+    margin-top: 0.25rem;
+    padding: 0.125rem 0.5rem;
+  }
+
+  .game-hud-compact .hud-health-col .w-4.h-4 {
+    width: 0.625rem;
+    height: 0.625rem;
   }
 
   .countdown-compact .countdown-fighter-card {
@@ -425,6 +554,15 @@ body {
   .menu-landscape-stack {
     transform: scale(0.85);
     transform-origin: top center;
+  }
+
+  .char-select-content {
+    transform: scale(0.9);
+    transform-origin: top center;
+  }
+
+  .char-select-difficulty-desc {
+    display: none;
   }
 }
 /* Custom text shadow utility */

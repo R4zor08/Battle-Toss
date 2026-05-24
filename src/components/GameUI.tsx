@@ -285,11 +285,11 @@ export const GameUI: React.FC<GameUIProps> = ({
                   }
                   size={28} />
                 
-                  <span className="text-[10px] text-white font-bold mt-1 text-center leading-tight px-1">
+                  <span className="hud-powerup-label text-[10px] text-white font-bold mt-1 text-center leading-tight px-1">
                     {pu.name}
                   </span>
 
-                  <div className="absolute -top-3 -right-3 w-6 h-6 rounded-full bg-yellow-500 text-black font-black flex items-center justify-center text-xs border-2 border-black">
+                  <div className="hud-powerup-cost absolute -top-3 -right-3 w-6 h-6 rounded-full bg-yellow-500 text-black font-black flex items-center justify-center text-xs border-2 border-black">
                     {pu.cost}
                   </div>
 
