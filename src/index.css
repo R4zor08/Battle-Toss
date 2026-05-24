@@ -28,7 +28,8 @@ body {
 
 .game-viewport {
   width: 100%;
-  height: 100dvh;
+  height: 100svh;
+  height: var(--vvh, 100dvh);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,10 +49,28 @@ body {
   background-color: #111827;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   aspect-ratio: 16 / 9;
-  width: min(100vw, calc(100dvh * 16 / 9), 1200px);
-  height: min(100dvh, calc(100vw * 9 / 16), calc(1200px * 9 / 16));
+  width: min(
+    100%,
+    calc((var(--vvh, 100dvh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 16 / 9),
+    1200px
+  );
+  height: min(
+    100%,
+    calc((var(--vvw, 100vw) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) * 9 / 16),
+    calc(1200px * 9 / 16)
+  );
   max-width: 1200px;
   max-height: calc(1200px * 9 / 16);
+}
+
+.game-canvas {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.hud-turn-short {
+  display: none;
 }
 
 .game-shell button,
@@ -120,6 +139,14 @@ body {
     font-size: 1.125rem;
   }
 
+  .char-select-difficulty {
+    padding: 0.75rem;
+  }
+
+  .char-select-difficulty span.font-black.text-2xl {
+    font-size: 1.25rem;
+  }
+
   .game-hud-compact .hud-player-name {
     display: none;
   }
@@ -142,6 +169,18 @@ body {
     margin-top: 0.25rem;
     padding: 0.25rem 0.5rem;
     min-width: 5rem;
+  }
+
+  .game-hud-compact .hud-turn-full {
+    display: none;
+  }
+
+  .game-hud-compact .hud-turn-short {
+    display: inline;
+  }
+
+  .game-hud-compact .hud-bottom-bar {
+    padding-bottom: 0.25rem;
   }
 
   .game-hud-compact .hud-powerups {
@@ -192,6 +231,78 @@ body {
 
   .gallery-compact-header {
     margin-bottom: 0.5rem;
+  }
+}
+
+/* ── Landscape-tight (smallest phone landscape) ── */
+
+@media (orientation: landscape) and (max-height: 430px) {
+  .menu-logo-wrap {
+    min-height: min(32vw, 140px);
+  }
+
+  .menu-title-main {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+
+  .char-select-avatar {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .countdown-compact .countdown-fighter-card {
+    width: 100px !important;
+  }
+
+  .countdown-compact .countdown-fighter-ring {
+    width: 4rem !important;
+    height: 4rem !important;
+  }
+
+  .countdown-compact .countdown-digit:not(.countdown-fight-text) {
+    font-size: 2.75rem;
+  }
+
+  .countdown-compact .countdown-digit-wrap {
+    min-height: 3rem;
+  }
+
+  .game-hud-compact .hud-wind {
+    display: none;
+  }
+
+  .game-hud-compact .hud-bottom-bar {
+    padding-bottom: 0.25rem;
+  }
+}
+
+/* ── All touch phones in landscape ── */
+
+@media (pointer: coarse) and (orientation: landscape) {
+  .menu-mobile-scroll {
+    overflow-y: auto;
+    min-height: 0;
+    justify-content: flex-start;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .game-hud-compact .hud-health-col {
+    width: 28%;
+    max-width: 140px;
+  }
+
+  .game-hud-compact .hud-powerups {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .game-hud-compact .hud-powerup-btn {
+    scroll-snap-align: start;
+  }
+
+  .hud-tooltip-desktop {
+    display: none;
   }
 }
 /* Custom text shadow utility */

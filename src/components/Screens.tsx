@@ -95,7 +95,7 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
   };
 
   return (
-    <div className="menu-shell absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
+    <div className="menu-shell menu-mobile-scroll absolute inset-0 flex flex-col items-center justify-center overflow-y-auto min-h-0">
       <MenuBackground />
 
       <div className="absolute top-4 right-4 z-20 flex gap-2">
@@ -209,7 +209,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
   const characters = Object.values(CHARACTERS);
   const maps = Object.values(MAPS);
   return (
-    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-6 min-h-0">
+    <div className="char-select-shell absolute inset-0 flex flex-col items-center bg-gray-900 text-white p-3 sm:p-6 min-h-0 overflow-hidden">
       <div className="char-select-header w-full flex justify-between items-center mb-8 shrink-0">
         <button
           onClick={onBack}
@@ -293,7 +293,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
               <button
                 key={d.id}
                 onClick={() => setDifficulty(d.id)}
-                className={`flex flex-col items-start p-6 rounded-2xl border-4 transition-all bg-gradient-to-br ${d.color} ${isSelected ? 'border-yellow-400 scale-105 shadow-[0_0_25px_rgba(250,204,21,0.6)]' : 'border-gray-700 hover:border-gray-400 opacity-80 hover:opacity-100'}`}>
+                className={`char-select-difficulty flex flex-col items-start p-4 sm:p-6 rounded-2xl border-4 transition-all bg-gradient-to-br ${d.color} ${isSelected ? 'border-yellow-400 scale-105 shadow-[0_0_25px_rgba(250,204,21,0.6)]' : 'border-gray-700 hover:border-gray-400 opacity-80 hover:opacity-100'}`}>
                 
                   <span className="font-black text-2xl text-white tracking-wider drop-shadow">
                     {d.label}

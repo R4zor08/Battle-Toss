@@ -18,8 +18,10 @@ import {
 import { GameUI } from './components/GameUI';
 import { MatchCountdown } from './components/MatchCountdown';
 import { OrientationPrompt } from './components/OrientationPrompt';
+import { useVisualViewport } from './hooks/useVisualViewport';
 import { GAME_CONSTANTS } from './game/constants';
 export function App() {
+  useVisualViewport();
   const [screen, setScreen] = useState<ScreenState>('loading');
   const [gameMode, setGameMode] = useState<'ai' | 'local'>('ai');
   const [config, setConfig] = useState({
@@ -158,7 +160,7 @@ export function App() {
 
         {isPaused && screen === 'playing' &&
         <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4">
-            <div className="modal-compact bg-gray-900 p-8 rounded-2xl border-2 border-gray-700 flex flex-col gap-4 min-w-[300px] max-w-md w-full">
+            <div className="modal-compact bg-gray-900 p-8 rounded-2xl border-2 border-gray-700 flex flex-col gap-4 min-w-0 w-full max-w-md">
               <h2 className="text-3xl font-black text-white text-center mb-4">
                 PAUSED
               </h2>
@@ -221,10 +223,11 @@ function GameContainer({
         ref={canvasRef}
         width={GAME_CONSTANTS.CANVAS_WIDTH}
         height={GAME_CONSTANTS.CANVAS_HEIGHT}
-        className="w-full h-full block"
+        className="game-canvas w-full h-full block touch-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         onPointerLeave={handlePointerUp} />
       
       {showUI &&

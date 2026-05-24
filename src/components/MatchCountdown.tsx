@@ -69,14 +69,14 @@ const FighterCard: React.FC<FighterCardProps> = ({ charId, role, accent }) => {
   const theme = ACCENT[accent];
 
   return (
-    <div className={`flex flex-col items-center gap-3 w-[130px] sm:w-[150px] ${theme.enter}`}>
+    <div className={`flex flex-col items-center gap-3 w-[130px] sm:w-[150px] countdown-fighter-card ${theme.enter}`}>
       <div className="relative">
         <div
           className={`absolute -inset-1 rounded-full bg-gradient-to-br ${theme.ring} opacity-80 animate-countdown-ring-spin blur-[1px]`}
           aria-hidden
         />
         <div
-          className="relative w-[5.5rem] h-[5.5rem] sm:w-28 sm:h-28 rounded-full p-[3px] bg-gradient-to-br from-white/20 via-white/5 to-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.45)]"
+          className="countdown-fighter-ring relative w-[5.5rem] h-[5.5rem] sm:w-28 sm:h-28 rounded-full p-[3px] bg-gradient-to-br from-white/20 via-white/5 to-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.45)]"
           style={{ boxShadow: `0 0 28px ${theme.glow}, 0 8px 32px rgba(0,0,0,0.45)` }}>
           <div
             className="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-black/55 backdrop-blur-sm"

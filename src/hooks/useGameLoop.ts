@@ -17,6 +17,7 @@ frozen: boolean = false) =>
   const aiTimerRef = useRef<NodeJS.Timeout>();
   const gameOverSoundPlayed = useRef(false);
   const frozenRef = useRef(frozen);
+  const activePointerId = useRef<number | null>(null);
 
   useEffect(() => {
     frozenRef.current = frozen;
@@ -106,6 +107,30 @@ frozen: boolean = false) =>
     };
   }, []);
 
+  const mapPointerToCanvas = (clientX: number, clientY: number) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect || !canvasRef.current) return null;
+
+    const scaleX = canvasRef.current.width / rect.width;
+    const scaleY = canvasRef.current.height / rect.height;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const releasePointer = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (activePointerId.current === e.pointerId) {
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {
+        /* already released */
+      }
+      activePointerId.current = null;
+    }
+  };
+
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (frozenRef.current) return;
     initAudio();
@@ -113,39 +138,43 @@ frozen: boolean = false) =>
     if (state.phase !== 'aiming' || state.players[state.currentTurnIndex].isAI)
     return;
 
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const point = mapPointerToCanvas(e.clientX, e.clientY);
+    if (!point) return;
 
-    const scaleX = canvasRef.current!.width / rect.width;
-    const scaleY = canvasRef.current!.height / rect.height;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    activePointerId.current = e.pointerId;
 
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
-
-    state.aimDragStart = { x, y };
-    state.aimDragCurrent = { x, y };
+    state.aimDragStart = point;
+    state.aimDragCurrent = point;
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (frozenRef.current) return;
     const state = stateRef.current;
     if (!state.aimDragStart) return;
+    if (
+      activePointerId.current !== null &&
+      e.pointerId !== activePointerId.current
+    )
+    return;
 
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const point = mapPointerToCanvas(e.clientX, e.clientY);
+    if (!point) return;
 
-    const scaleX = canvasRef.current!.width / rect.width;
-    const scaleY = canvasRef.current!.height / rect.height;
-
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
-
-    state.aimDragCurrent = { x, y };
+    state.aimDragCurrent = point;
   };
 
-  const handlePointerUp = () => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (frozenRef.current) return;
     const state = stateRef.current;
+    if (
+      activePointerId.current !== null &&
+      e.pointerId !== activePointerId.current
+    )
+    return;
+
+    releasePointer(e);
+
     if (!state.aimDragStart || !state.aimDragCurrent) return;
 
     const dx = state.aimDragStart.x - state.aimDragCurrent.x;
@@ -154,8 +183,7 @@ frozen: boolean = false) =>
     const dist = Math.sqrt(dx * dx + dy * dy);
 
     if (dist > 10) {
-      // Minimum drag distance
-      const power = Math.min(dist * 0.15, 35); // GAME_CONSTANTS.DRAG_SCALE and MAX_POWER
+      const power = Math.min(dist * 0.15, 35);
       const angle = Math.atan2(dy, dx);
       fireProjectile(state, power, angle);
     } else {

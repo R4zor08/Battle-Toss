@@ -4,9 +4,11 @@ import { CHARACTERS, POWER_UPS } from '../game/data';
 import { GAME_CONSTANTS } from '../game/constants';
 import { Settings, Zap, Wind } from 'lucide-react';
 import { loadAvatar, subscribeAvatars } from '../utils/avatars';
+import { useOrientation } from '../hooks/useOrientation';
 const AIDebugOverlay: React.FC<{
   state: GameEngineState;
-}> = ({ state }) => {
+  hidden?: boolean;
+}> = ({ state, hidden }) => {
   const [, tick] = useState(0);
   useEffect(() => {
     const id = setInterval(() => tick((n) => n + 1), 50);
@@ -15,7 +17,7 @@ const AIDebugOverlay: React.FC<{
   const p2 = state.players[1];
   const aiTurn =
   state.players[state.currentTurnIndex]?.isAI && state.phase === 'aiming';
-  if (!p2.isAI || !state.difficulty) return null;
+  if (hidden || !p2.isAI || !state.difficulty) return null;
   const reactionMs = (state as any).aiReactionMs as number | undefined;
   const startedAt = (state as any).aiReactionStart as number | null | undefined;
   const elapsed = startedAt ? performance.now() - startedAt : 0;
@@ -158,6 +160,7 @@ export const GameUI: React.FC<GameUIProps> = ({
   onActivatePowerUp,
   onPause
 }) => {
+  const { isMobile } = useOrientation();
   const p1 = state.players[0];
   const p2 = state.players[1];
   const currentPlayer = state.players[state.currentTurnIndex];
@@ -168,7 +171,7 @@ export const GameUI: React.FC<GameUIProps> = ({
     const isLow = hpPercent < 30;
     return (
       <div
-        className={`flex flex-col ${isRight ? 'items-end' : 'items-start'} w-1/3 max-w-[300px]`}>
+        className={`flex flex-col hud-health-col ${isRight ? 'items-end' : 'items-start'} w-[28%] sm:w-1/3 max-w-[140px] sm:max-w-[300px]`}>
         
         <div
           className={`flex items-center gap-2 mb-1 ${isRight ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -209,7 +212,7 @@ export const GameUI: React.FC<GameUIProps> = ({
   };
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-2 sm:p-4 game-hud-compact">
-      <AIDebugOverlay state={state} />
+      <AIDebugOverlay state={state} hidden={isMobile} />
       {/* Top HUD */}
       <div className="flex justify-between items-start w-full">
         {renderHealthBar(p1, false)}
@@ -217,20 +220,25 @@ export const GameUI: React.FC<GameUIProps> = ({
         <div className="flex flex-col items-center">
           <button
             onClick={onPause}
-            className="pointer-events-auto bg-gray-800/80 hover:bg-gray-700 p-2 rounded-full text-white backdrop-blur-sm transition-transform hover:scale-110">
+            className="pointer-events-auto bg-gray-800/80 hover:bg-gray-700 p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-white backdrop-blur-sm transition-transform hover:scale-110">
             
-            <Settings size={24} />
+            <Settings size={20} />
           </button>
 
           <div className="mt-4 hud-turn-badge bg-black/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm border border-white/20 flex flex-col items-center">
-            <span className="text-white font-bold text-xs sm:text-sm">
+            <span className="text-white font-bold text-xs sm:text-sm text-center">
               {state.phase === 'aiming' ?
               <span className={isP1Turn ? 'text-blue-400' : 'text-red-400'}>
+                  <span className="hud-turn-full">
                   {isP1Turn ?
                 'PLAYER 1 TURN' :
                 p2.isAI ?
                 'AI TURN' :
                 'PLAYER 2 TURN'}
+                  </span>
+                  <span className="hud-turn-short">
+                  {isP1Turn ? 'P1 TURN' : p2.isAI ? 'AI TURN' : 'P2 TURN'}
+                  </span>
                 </span> :
 
               <span className="text-yellow-400">FIRING...</span>
@@ -251,7 +259,7 @@ export const GameUI: React.FC<GameUIProps> = ({
       </div>
 
       {/* Bottom UI - Powerups */}
-      <div className="flex justify-center items-end pb-4">
+      <div className="flex justify-center items-end pb-4 hud-bottom-bar">
         {state.phase === 'aiming' && !currentPlayer.isAI &&
         <div className="pointer-events-auto hud-powerups flex gap-2 sm:gap-4 bg-black/40 p-2 sm:p-4 rounded-2xl backdrop-blur-md border border-white/10 max-w-full overflow-x-auto">
             {CHARACTERS[currentPlayer.characterId].powerUpIds.map((puId) => {
@@ -286,7 +294,7 @@ export const GameUI: React.FC<GameUIProps> = ({
                   </div>
 
                   {/* Tooltip */}
-                  <div className="absolute bottom-full mb-2 hidden group-hover:block w-32 bg-black/90 text-white text-xs p-2 rounded border border-white/20 z-10 pointer-events-none">
+                  <div className="hud-tooltip-desktop absolute bottom-full mb-2 hidden group-hover:block w-32 bg-black/90 text-white text-xs p-2 rounded border border-white/20 z-10 pointer-events-none">
                     {pu.description}
                   </div>
                 </button>);

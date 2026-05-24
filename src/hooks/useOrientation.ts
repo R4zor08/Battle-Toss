@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 
-const MOBILE_MAX_WIDTH = 768;
-
 const getOrientationState = () => {
   const isPortrait = window.matchMedia('(orientation: portrait)').matches;
   const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
-  const isNarrowViewport = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const isMobile = isCoarsePointer || isNarrowViewport;
+  const isMobile =
+    (isCoarsePointer && window.innerWidth <= 1024) || window.innerWidth <= 640;
   const shouldShowRotatePrompt = isMobile && isPortrait;
 
   return { isMobile, isPortrait, shouldShowRotatePrompt };
