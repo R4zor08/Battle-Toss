@@ -43,6 +43,16 @@ body {
     env(safe-area-inset-bottom, 0px)
     env(safe-area-inset-left, 0px);
   box-sizing: border-box;
+  position: relative;
+}
+
+.game-viewport-menu {
+  background-color: #120b2e;
+}
+
+.game-viewport-menu .game-shell {
+  background-color: transparent;
+  box-shadow: none;
 }
 
 .game-shell {
@@ -55,6 +65,7 @@ body {
   height: min(100%, calc(var(--vvw, 100vw) * 9 / 16), calc(1200px * 9 / 16));
   max-width: 1200px;
   max-height: calc(1200px * 9 / 16);
+  z-index: 1;
 }
 
 .game-canvas {
@@ -1085,8 +1096,23 @@ body {
 
 /* ── Main Menu (reference style) ── */
 
+.menu-viewport-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 32%, rgba(255, 140, 60, 0.22) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 70% at 50% 22%, rgba(120, 60, 180, 0.45) 0%, transparent 58%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(100, 60, 180, 0.25) 0%, transparent 55%),
+    radial-gradient(ellipse 140% 120% at 50% 100%, #2e1a6b 0%, #1a1040 55%, #120b2e 100%);
+}
+
 .menu-opener {
   position: relative;
+  overflow-x: hidden;
+  min-width: 0;
 }
 
 .menu-opener-column {
@@ -1097,13 +1123,14 @@ body {
   max-width: 520px;
   margin: 0 auto;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .menu-shell {
-  background:
-    radial-gradient(ellipse 80% 55% at 50% 32%, rgba(255, 140, 60, 0.22) 0%, transparent 50%),
-    radial-gradient(ellipse 90% 70% at 50% 22%, rgba(120, 60, 180, 0.45) 0%, transparent 58%),
-    radial-gradient(ellipse 120% 100% at 50% 100%, #2e1a6b 0%, #120b2e 42%, #0a0512 100%);
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+  min-width: 0;
   box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.35);
 }
 
@@ -1112,8 +1139,8 @@ body {
   top: 28%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(55vw, 55vh, 420px);
-  height: min(55vw, 55vh, 420px);
+  width: min(100%, 55vh, 420px);
+  height: min(100%, 55vh, 420px);
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -1148,6 +1175,16 @@ body {
   top: -20px;
   right: -20px;
   background: rgba(140, 100, 220, 0.3);
+}
+
+.menu-bokeh-bottom {
+  width: min(100%, 600px);
+  height: min(50vh, 320px);
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(80, 50, 160, 0.35);
+  opacity: 0.6;
 }
 
 .menu-particles {
@@ -1224,16 +1261,16 @@ body {
 }
 
 .menu-logo-wrap {
-  --menu-portal-size: min(42vw, 42vh, 380px);
-  --menu-portal-glow: min(35vw, 35vh, 320px);
-  --menu-portal-icons: min(30vw, 30vh, 280px);
+  --menu-portal-size: min(100%, min(42vh, 380px));
+  --menu-portal-glow: min(80%, min(35vh, 320px));
+  --menu-portal-icons: min(70%, min(30vh, 280px));
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: min(92vw, 520px);
-  min-height: min(42vw, 42vh, 340px);
+  width: min(100%, 520px);
+  min-height: min(42vh, 340px);
   margin-bottom: 0.75rem;
   z-index: 10;
   flex-shrink: 0;
@@ -1317,6 +1354,7 @@ body {
   line-height: 0.95;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 .menu-title-battle {
@@ -1357,6 +1395,7 @@ body {
   justify-content: center;
   gap: 0.5rem;
   margin-top: 0.35rem;
+  max-width: 100%;
 }
 
 .menu-title-masters {

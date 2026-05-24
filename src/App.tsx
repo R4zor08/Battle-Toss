@@ -18,6 +18,7 @@ import {
 import { GameUI } from './components/GameUI';
 import { MatchCountdown } from './components/MatchCountdown';
 import { OrientationPrompt } from './components/OrientationPrompt';
+import { MenuViewportBackground } from './components/MenuLogo';
 import { useVisualViewport } from './hooks/useVisualViewport';
 import { GAME_CONSTANTS } from './game/constants';
 export function App() {
@@ -103,8 +104,9 @@ export function App() {
     setIsPaused(false);
   };
   return (
-    <div className="game-viewport font-sans select-none touch-none">
+    <div className={`game-viewport font-sans select-none touch-none${screen === 'menu' ? ' game-viewport-menu' : ''}`}>
       <OrientationPrompt />
+      {screen === 'menu' && <MenuViewportBackground />}
       <div className="game-shell">
         
         {screen === 'loading' && <LoadingScreen />}

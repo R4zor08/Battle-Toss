@@ -74,11 +74,9 @@ const PARTICLE_POSITIONS: { left: string; top: string; delay: string }[] = [
   { left: '25%', top: '48%', delay: '1.9s' },
 ];
 
-export const MenuBackground: React.FC = () => (
-  <>
-    <div className="menu-portal-burst" aria-hidden />
-    <div className="menu-bokeh menu-bokeh-warm" aria-hidden />
-    <div className="menu-bokeh menu-bokeh-cool" aria-hidden />
+export const MenuViewportBackground: React.FC = () => (
+  <div className="menu-viewport-bg" aria-hidden>
+    <div className="menu-bokeh menu-bokeh-bottom" aria-hidden />
     <div className="menu-particles" aria-hidden>
       {PARTICLE_POSITIONS.map((p, i) => (
         <span
@@ -88,6 +86,14 @@ export const MenuBackground: React.FC = () => (
         />
       ))}
     </div>
+  </div>
+);
+
+export const MenuBackground: React.FC = () => (
+  <>
+    <div className="menu-portal-burst" aria-hidden />
+    <div className="menu-bokeh menu-bokeh-warm" aria-hidden />
+    <div className="menu-bokeh menu-bokeh-cool" aria-hidden />
     <div className="menu-sparkle" aria-hidden />
   </>
 );

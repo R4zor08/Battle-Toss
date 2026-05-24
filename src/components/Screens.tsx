@@ -95,7 +95,7 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
   };
 
   return (
-    <div className="menu-shell menu-opener menu-mobile-scroll menu-landscape-fit absolute inset-0 flex flex-col items-center justify-start overflow-y-auto min-h-0">
+    <div className="menu-shell menu-opener menu-mobile-scroll menu-landscape-fit absolute inset-0 flex flex-col items-center justify-start overflow-y-auto overflow-x-hidden min-h-0 min-w-0">
       <MenuBackground />
 
       <div className="menu-audio-controls absolute top-4 right-4 z-20 flex gap-2">
