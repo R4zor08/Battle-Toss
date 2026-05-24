@@ -95,10 +95,10 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
   };
 
   return (
-    <div className="menu-shell menu-mobile-scroll absolute inset-0 flex flex-col items-center justify-center overflow-y-auto min-h-0">
+    <div className="menu-shell menu-mobile-scroll menu-landscape-fit absolute inset-0 flex flex-col items-center justify-start overflow-y-auto min-h-0">
       <MenuBackground />
 
-      <div className="absolute top-4 right-4 z-20 flex gap-2">
+      <div className="menu-audio-controls absolute top-4 right-4 z-20 flex gap-2">
         <button
           onClick={toggleSfx}
           className={`menu-audio-btn ${audio.sfxMuted ? 'menu-audio-btn-muted' : ''}`}
@@ -113,9 +113,10 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
         </button>
       </div>
 
-      <MenuLogo />
+      <div className="menu-landscape-stack z-10 px-4 pb-2">
+        <MenuLogo />
 
-      <div className="flex flex-col items-center gap-4 w-full max-w-sm px-4 z-10">
+        <div className="menu-actions flex flex-col items-center gap-2 sm:gap-4 w-full max-w-sm">
         <button
           onClick={() => handleMenuAction(() => onStartGame('ai'))}
           className="menu-btn-primary menu-btn-primary-green">
@@ -131,7 +132,7 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
         </button>
 
         {onNavigate && (
-          <div className="grid grid-cols-2 gap-3 w-full mt-1">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 w-full mt-1">
             <button
               onClick={() => handleMenuAction(() => onNavigate('characterGallery' as ScreenState))}
               className="menu-btn-secondary">
@@ -144,6 +145,7 @@ export const MainMenu: React.FC<MenuProps> = ({ onStartGame, onNavigate }) => {
             </button>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

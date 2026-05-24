@@ -268,13 +268,97 @@ body {
 /* ── All touch phones in landscape ── */
 
 @media (pointer: coarse) and (orientation: landscape) {
+  .game-viewport {
+    align-items: center;
+  }
+
+  .game-shell {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 16 / 9;
+  }
+
   .menu-mobile-scroll {
     overflow-y: auto;
     min-height: 0;
     justify-content: flex-start;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
     touch-action: pan-y;
+  }
+
+  .menu-audio-controls {
+    top: max(0.5rem, env(safe-area-inset-top, 0px));
+    right: max(0.5rem, env(safe-area-inset-right, 0px));
+  }
+
+  .menu-landscape-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .menu-logo-wrap {
+    width: min(70vw, 320px);
+    min-height: 0;
+    height: auto;
+    margin-bottom: 0.25rem;
+  }
+
+  .menu-portal-ring {
+    width: min(28vh, 140px);
+    height: min(28vh, 140px);
+    margin-top: calc(min(28vh, 140px) / -2);
+    margin-left: calc(min(28vh, 140px) / -2);
+  }
+
+  .menu-portal-glow {
+    width: min(24vh, 120px);
+    height: min(24vh, 120px);
+    margin-top: calc(min(24vh, 120px) / -2);
+    margin-left: calc(min(24vh, 120px) / -2);
+  }
+
+  .menu-portal-icons {
+    width: min(20vh, 100px);
+    height: min(20vh, 100px);
+    margin-top: calc(min(20vh, 100px) / -2 - 12px);
+    margin-left: calc(min(20vh, 100px) / -2);
+  }
+
+  .menu-title-stack {
+    margin-top: 0.5rem;
+  }
+
+  .menu-title-main {
+    font-size: clamp(1.25rem, 5.5vh, 2.25rem);
+  }
+
+  .menu-title-masters {
+    font-size: clamp(0.85rem, 3.5vh, 1.5rem);
+  }
+
+  .menu-wing {
+    width: clamp(20px, 4vh, 36px);
+  }
+
+  .menu-actions {
+    gap: 0.5rem;
+  }
+
+  .menu-btn-primary {
+    padding: 0.5rem 1rem;
+    font-size: clamp(0.75rem, 2.5vh, 1rem);
+    max-width: 16rem;
+  }
+
+  .menu-btn-secondary {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.7rem;
   }
 
   .char-select-content {
@@ -286,6 +370,23 @@ body {
 
   .char-select-header {
     margin-bottom: 0.5rem;
+  }
+
+  .char-select-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .countdown-compact .countdown-fighter-card {
+    width: min(22vh, 120px) !important;
+  }
+
+  .countdown-compact .countdown-fighter-ring {
+    width: min(12vh, 4.5rem) !important;
+    height: min(12vh, 4.5rem) !important;
+  }
+
+  .countdown-compact .countdown-digit:not(.countdown-fight-text) {
+    font-size: min(12vh, 3.5rem);
   }
 
   .menu-btn-primary,
@@ -317,6 +418,13 @@ body {
 
   .hud-tooltip-desktop {
     display: none;
+  }
+}
+
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 400px) {
+  .menu-landscape-stack {
+    transform: scale(0.85);
+    transform-origin: top center;
   }
 }
 /* Custom text shadow utility */
